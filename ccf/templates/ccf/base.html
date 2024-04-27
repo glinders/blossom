@@ -33,7 +33,18 @@
             <div class="navbar-nav">
               <a class="nav-item nav-link" href="#">Login</a>
               <a class="nav-item nav-link" href="#">Register</a>
+              <a class="nav-item nav-link" href="#" onClick="document.getElementById('logoutform').submit()">Logout0</a>
+              <li class="nav-item">
+                <a class="nav-link" href="#"
+                  onClick="document.getElementById('logoutform').submit()">
+                  Logout1
+                </a>
+              </li>
             </div>
+            <form id="logoutform" method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <input type="hidden">
+            </form>
           </div>
         </div>
       </nav>
