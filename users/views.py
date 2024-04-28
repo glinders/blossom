@@ -13,7 +13,7 @@ def register(request):
                 f'The account for {username} has been created.'''
                 ' You are now able to log in.'
             ))
-            return redirect('users-login')
+            return redirect('users:login')
     else:
         # create an empty form
         form = UserRegisterForm()
