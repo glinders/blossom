@@ -129,7 +129,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# settings for crispy forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# tailor login behaviour
 LOGIN_REDIRECT_URL = 'ccf:home'
+LOGIN_URL = 'users:login'
