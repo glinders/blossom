@@ -19,10 +19,14 @@ posts = [
 
 def home(request):
     context = {
+        'title': 'Home',
         'posts': posts,
     }
     return render(request, 'ccf/home.html', context)
 
 
 def about(request):
-    return render(request, 'ccf/about.html', {'title': 'About'})
+    context = {
+        'title': 'About',
+    }
+    return render(request, 'ccf/about.html', context)
