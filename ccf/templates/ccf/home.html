@@ -1,18 +1,18 @@
 {% extends "ccf/base.html" %}
 {% block content %}
-    {% for post in posts %}
-        <article class="media content-section">
-          <!-- show user's profile image next to each post -->
-          <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <!-- we use a filter on date_posted to get desired formatting -->
-              <small class="text-muted">{{ post.date_posted|date:"d F, Y" }}</small>
-            </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-        </article>
-    {% endfor %}
+  {% for post in posts %}
+    <article class="media content-section">
+      <!-- show user's profile image next to each post -->
+      <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="#">{{ post.author }}</a>
+          <!-- we use a filter on date_posted to get desired formatting -->
+          <small class="text-muted">{{ post.date_posted|date:"d F, Y" }}</small>
+        </div>
+        <h2><a class="article-title" href="{% url 'ccf:post-detail' post.id %}">{{ post.title }}</a></h2>
+        <p class="article-content">{{ post.content }}</p>
+      </div>
+    </article>
+  {% endfor %}
 {% endblock content %}
