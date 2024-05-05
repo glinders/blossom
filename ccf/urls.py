@@ -18,6 +18,24 @@ urlpatterns = [
         views.PostDetailView.as_view(),
         name='post-detail',
     ),
+    # page to create a post
+    path(
+        'post/new/',
+        views.PostCreateView.as_view(),
+        name='post-create',
+    ),
+    # page to update a post
+    path(
+        'post/<int:pk>/update/',
+        views.PostUpdateView.as_view(),
+        name='post-update',
+    ),
+    # page to delete a post
+    path(
+        'post/<int:pk>/delete/',
+        views.PostDeleteView.as_view(),
+        name='post-delete',
+    ),
     # about page
     path(
         'about/',

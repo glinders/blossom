@@ -1,8 +1,15 @@
 from django.shortcuts import render
 from .models import Post
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.views.generic import (
     ListView,
     DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
 )
 
 
@@ -25,8 +32,45 @@ class PostListView(ListView):
     ordering = ['-date_posted']
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
+
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    success_url = '/'
+
+    # used by UserPassesTestMixin
+    def test_func(self):
+        # get current post
+        post = self.get_object()
+        # user must be the author of the post to delete it
+        return self.request.user == post.author
+
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['title', 'content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    # used by UserPassesTestMixin
+    def test_func(self):
+        # get current post
+        post = self.get_object()
+        # user must be the author of the post to update it
+        return self.request.user == post.author
 
 
 # function based view for the home page
