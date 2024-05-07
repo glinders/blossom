@@ -1,5 +1,8 @@
-from django.shortcuts import render
-from .models import Post
+from django.shortcuts import (
+    render,
+    get_object_or_404,
+)
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin,
@@ -11,6 +14,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from .models import Post
 
 
 # class based view for the home page
@@ -30,6 +34,19 @@ class PostListView(ListView):
     # order our posts by date in reversed order (using a '-') to get the
     # newest posts first i.e. at the top of the page
     ordering = ['-date_posted']
+    # turn on paginator and show a limited number of pages
+    paginate_by = 5
+
+
+class UserPostListView(ListView):
+    model = Post
+    template_name = 'ccf/user_posts.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Post.objects.filter(author=user).order_by('-date_posted')
 
 
 class PostDetailView(LoginRequiredMixin, DetailView):

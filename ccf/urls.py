@@ -12,6 +12,12 @@ urlpatterns = [
         views.PostListView.as_view(),
         name='home',
     ),
+    # user page; lists all posts of a user
+    path(
+        'user/<str:username>/',
+        views.UserPostListView.as_view(),
+        name='user-posts',
+    ),
     # page to view single post
     path(
         'post/<int:pk>/',

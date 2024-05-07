@@ -28,7 +28,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 <User: brenda>
 >>> user.id
 2
->>> user.pk  # primary key
+>>> user.pk  # primary key[migrations](ccf%2Fmigrations)
 2
 >>> user = User.objects.get(id=3)
 >>> user
@@ -50,3 +50,24 @@ show posts from user and add post:
 <QuerySet [<Post: post 2>, <Post: post 3>]>
 ```
 
+### add posts (test) data using shell
+```
+(venv311_django) PS C:\projects\django\blossom> python manage.py shell    
+Python 3.11.5 on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> import json
+>>> from ccf.models import Post  
+>>> with open('test_posts.json') as f:
+...     posts_json = json.load(f)
+... 
+>>> with open('test_posts.json') as f:
+...     posts_json = json.load(f)
+... 
+>>> for post in posts_json:
+...     post = Post(title=post['title'], content=post['content'], author_id=post['user_id'])
+...     post.save()
+... 
+>>> exit()
+(venv311_django) PS C:\projects\django\blossom> 
+```
