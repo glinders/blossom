@@ -1,2 +1,6 @@
+# cached python files
 **/__pycache__/
+# current database
 db.sqlite3
+# profile pictures
+media/profile_pics/

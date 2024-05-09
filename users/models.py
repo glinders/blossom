@@ -18,9 +18,9 @@ class Profile(models.Model):
         upload_to=profile_pics_dir,
     )
 
-    def save(self):
+    def save(self, *args, **kwargs):
         # first save image
-        super().save()
+        super().save(*args, **kwargs)
         # get current image
         img = Image.open(self.image.path)
         # then resize image to save space & reduce load time
