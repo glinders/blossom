@@ -39,7 +39,7 @@ if os.getenv("DJANGO_DEBUG_FLAG_TRUE") is not None:
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*', ]
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -139,11 +139,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # location of media files on file system
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # location where browser references media files
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
