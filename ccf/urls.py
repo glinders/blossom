@@ -6,41 +6,41 @@ from . import views
 app_name = 'ccf'
 
 urlpatterns = [
-    # home page; lists all posts
+    # home page; lists all clients
     path(
         '',
-        views.PostListView.as_view(),
+        views.ClientListView.as_view(),
         name='home',
     ),
-    # user page; lists all posts of a user
+    # user page; lists all clients of a user
     path(
         'user/<str:username>/',
-        views.UserPostListView.as_view(),
-        name='user-posts',
+        views.UserClientListView.as_view(),
+        name='user-clients',
     ),
-    # page to view single post
+    # page to view single client
     path(
-        'post/<int:pk>/',
-        views.PostDetailView.as_view(),
-        name='post-detail',
+        'client/<int:pk>/',
+        views.ClientDetailView.as_view(),
+        name='client-detail',
     ),
-    # page to create a post
+    # page to create a client
     path(
-        'post/new/',
-        views.PostCreateView.as_view(),
-        name='post-create',
+        'client/new/',
+        views.ClientCreateView.as_view(),
+        name='client-create',
     ),
-    # page to update a post
+    # page to update a client
     path(
-        'post/<int:pk>/update/',
-        views.PostUpdateView.as_view(),
-        name='post-update',
+        'client/<int:pk>/update/',
+        views.ClientUpdateView.as_view(),
+        name='client-update',
     ),
-    # page to delete a post
+    # page to delete a client
     path(
-        'post/<int:pk>/delete/',
-        views.PostDeleteView.as_view(),
-        name='post-delete',
+        'client/<int:pk>/delete/',
+        views.ClientDeleteView.as_view(),
+        name='client-delete',
     ),
     # about page
     path(
@@ -48,10 +48,4 @@ urlpatterns = [
         views.about,
         name='about',
     ),
-]
-
-# these contain the function based views
-urlpatterns_unused = [
-    path('', views.home, name='home'),
-    path('about/', views.about, name='about'),
 ]

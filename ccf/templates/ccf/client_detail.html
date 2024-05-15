@@ -1,0 +1,21 @@
+{% extends "ccf/base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'ccf:user-clients' object.therapist.username %}">{{ client.therapist }}</a>
+        <!-- we use a filter on date_added to get desired formatting -->
+        <small class="text-muted">{{ object.date_added|date:"d F, Y" }}</small>
+        {% if object.therapist == user %}
+          <!-- the 'div' moves the update and delete button to the next line -->
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:client-update' object.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'ccf:client-delete' object.id %}">Delete</a>
+          </div>
+        {% endif %}
+      </div>
+      <h2 class="article-title">{{ object.frienly_name }}</h2>
+      <p class="article-content">{{ object.content }}</p>
+    </div>
+  </article>
+{% endblock content %}
