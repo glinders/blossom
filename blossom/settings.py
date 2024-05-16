@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'bootstrap_datepicker_plus',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,7 +129,7 @@ AUTH_PASSWORD_VALIDATORS_ORIGINAL = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Pacific/Auckland'
 
 USE_I18N = True
 
@@ -158,3 +159,12 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # tailor login behaviour
 LOGIN_REDIRECT_URL = 'ccf:home'
 LOGIN_URL = 'users:login'
+
+# change date format for DatePickerInput
+BOOTSTRAP_DATEPICKER_PLUS = {
+    "variant_options": {
+        "date": {
+            "format": "MM/DD/YYYY",
+        },
+    }
+}

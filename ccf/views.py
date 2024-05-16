@@ -14,6 +14,12 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from django.forms import (
+    SelectDateWidget,
+)
+from bootstrap_datepicker_plus.widgets import (
+    DatePickerInput,
+)
 from .models import Client
 
 
@@ -49,8 +55,43 @@ class UserClientListView(ListView):
         return Client.objects.filter(therapist=user).order_by('-date_added')
 
 
+class ClientDataView:
+    model = Client
+    fields = [
+        'friendly_name',
+        'full_name',
+        'address',
+        'mobile',
+        'phone',
+        'email',
+        'profession',
+        'dob',
+    ]
+    optional_fields = [
+        'full_name',
+        'address',
+        'mobile',
+        'phone',
+        'email',
+        'profession',
+    ]
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        for f in self.optional_fields:
+            form.fields[f].required = False
+        form.fields['dob'].widget = DatePickerInput()
+        form.fields['dob'].label = 'Date of birth'
+        return form
+
+    def form_valid(self, form):
+        form.instance.therapist = self.request.user
+        return super().form_valid(form)
+
+
 class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
+    fields = "__all__"
 
 
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -65,37 +106,17 @@ class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == client.therapist
 
 
-class ClientCreateView(LoginRequiredMixin, CreateView):
-    model = Client
-    fields = ['friendly_name']
-
-    def form_valid(self, form):
-        form.instance.therapist = self.request.user
-        return super().form_valid(form)
+class ClientCreateView(ClientDataView, LoginRequiredMixin, CreateView):
+    pass
 
 
-class ClientUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Client
-    fields = ['friendly_name']
-
-    def form_valid(self, form):
-        form.instance.therapist = self.request.user
-        return super().form_valid(form)
-
+class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     # used by UserPassesTestMixin
     def test_func(self):
         # get current client
         client = self.get_object()
         # user must be the therapist of the client to update it
         return self.request.user == client.therapist
-
-
-# function based view for the home page
-def home(request):
-    context = {
-        'clients': Client.objects.all()
-    }
-    return render(request, 'ccf/home.html', context)
 
 
 # function based view for the about page

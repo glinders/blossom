@@ -16,6 +16,14 @@
       </div>
       <h2 class="article-title">{{ object.frienly_name }}</h2>
       <p class="article-content">{{ object.content }}</p>
+      <table>
+      {% for label, value in object.get_detail_fields %}
+        <tr>
+          <td>{{ label }}</td>
+          <td>{{ value }}</td>
+        </tr>
+      {% endfor %}
+</table>
     </div>
   </article>
 {% endblock content %}

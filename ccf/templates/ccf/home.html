@@ -10,7 +10,15 @@
         </div>
         <h2><a class="article-title" href="{% url 'ccf:client-detail' client.id %}">{{ client.friendly_name }}</a></h2>
         <!-- todo:show clients as list -->
-        <p class="article-content">{{ client.friendly_name }}</p>
+        <p class="article-content">{{ client.friendly_name }} yzz {{ title }} xxx </p>
+        {% if title %}
+          <title>XXX - {{ title }}</title>
+          <p class="article-content"> yzz {{ title }} xxx </p>
+        {% else %}
+          <title>XXX - No Title</title>
+          <p class="article-content"> NO TITLE </p>
+        {% endif %}
+
       </div>
     </article>
   {% endfor %}

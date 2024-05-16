@@ -2,6 +2,8 @@
 {% load crispy_forms_tags %}
 {% block content %}
   <div class="content-section">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{ form.media }}  {# Adds widget's JS/CSS files from CDN #}
     <form method="POST">
       {% csrf_token %}
       <fieldset class="form-group">

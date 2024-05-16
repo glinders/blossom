@@ -4,7 +4,12 @@
 db.sqlite3
 # profile pictures
 media/profile_pics/
+# no need to keep migrations; we can make them again
+ccf/migrations
+users/migrations
 # don't include our environment
 .env
 # static production files
 static/
+# pycharm project files
+.idea
