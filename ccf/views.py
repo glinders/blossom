@@ -29,7 +29,7 @@ from .models import Client
 # for our class ClientListView this would be:
 #   ccf/client_list.html
 # we can pass our own name by setting attribute template_name
-class ClientListView(ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     # model that is going to be displayed as a list
     model = Client
     template_name = 'ccf/home.html'
@@ -44,7 +44,7 @@ class ClientListView(ListView):
     paginate_by = 5
 
 
-class UserClientListView(ListView):
+class UserClientListView(LoginRequiredMixin, ListView):
     model = Client
     template_name = 'ccf/user_clients.html'
     context_object_name = 'clients'

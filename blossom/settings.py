@@ -14,7 +14,13 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from django.core.management.utils import get_random_secret_key
+from django.contrib.messages import constants as messages
 
+
+# ensure messages.error is shown in red; fix for bootstrap
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
 
 # read environment variables from .env
 load_dotenv()
@@ -43,6 +49,9 @@ else:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
+# secret token needed for registering
+USER_REGISTER_TOKEN = os.getenv("USER_REGISTER_TOKEN")
 
 # Application definition
 
