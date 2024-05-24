@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.shortcuts import (
+    get_object_or_404,
+)
 import datetime
 
 
@@ -51,6 +54,10 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
+    def get_queryset(self):
+        client = get_object_or_404(client=self.kwargs.get('client'))
+        return Note.objects.filter(client=client).order_by('-date_updated')
+
     def get_absolute_url(self):
         # page to redirect to after creating new object
         return reverse('ccf:note-detail', kwargs={'pk': self.pk})
@@ -66,6 +73,10 @@ class Treatment(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_queryset(self):
+        client = get_object_or_404(client=self.kwargs.get('client'))
+        return Note.objects.filter(client=client).order_by('-date_treated')
 
     def get_absolute_url(self):
         # page to redirect to after creating new object

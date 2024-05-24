@@ -14,13 +14,12 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from django.forms import (
-    SelectDateWidget,
-)
 from bootstrap_datepicker_plus.widgets import (
     DatePickerInput,
 )
-from .models import Client
+from .models import (
+    Client, Note, Treatment,
+)
 
 
 # class based view for the home page
@@ -92,6 +91,17 @@ class ClientDataView:
 class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
     fields = "__all__"
+
+    def get_context_data(self, **kwargs):
+        # call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # specify the therapist
+        # todo:get therapist
+        # add in a QuerySet of all the Notes & Treatments for this client
+        context['notes'] = Note.objects.all()
+        context['treatments'] = Treatment.objects.all()
+        print(f'context:{context}')  # todo:test
+        return context
 
 
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
