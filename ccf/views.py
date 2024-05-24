@@ -18,7 +18,7 @@ from bootstrap_datepicker_plus.widgets import (
     DatePickerInput,
 )
 from .models import (
-    Client, Note, Treatment,
+    Client, Note, Treatment, Medical,
 )
 
 
@@ -95,12 +95,25 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # specify the therapist
-        # todo:get therapist
-        # add in a QuerySet of all the Notes & Treatments for this client
-        context['notes'] = Note.objects.all()
-        context['treatments'] = Treatment.objects.all()
-        print(f'context:{context}')  # todo:test
+        # add all the Notes & Treatments for this client
+        context['notes'] = (
+            Note.objects
+            .filter(client=context['client'])
+            .order_by('-date_updated')
+        )
+        context['treatments'] = (
+            Treatment.objects
+            .filter(client=context['client'])
+            .order_by('-date_treated')
+        )
+        context['medical'] = (
+            Medical.objects
+            .filter(client=context['client'])[0]
+        )
+        data = context['medical']  # todo:test
+        print(f'medical:{data}')  # todo:test
+        print(f'      c:{data.conditions}')  # todo:test
+        print(f'     df:{data.get_detail_fields()}')  # todo:test
         return context
 
 

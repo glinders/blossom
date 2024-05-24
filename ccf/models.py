@@ -9,7 +9,7 @@ import datetime
 
 
 def get_default_date():
-    return datetime.date(1974, 12, 6)
+    return datetime.date(1970, 1, 1)
 
 
 # each class in the model corresponds to a database table
@@ -34,11 +34,46 @@ class Client(models.Model):
         return self.friendly_name
 
     def get_detail_fields(self):
-        return [(field.verbose_name, field.value_from_object(self)) for field in self.__class__._meta.fields]
+        return [
+            (field.verbose_name, field.value_from_object(self))
+            for field in self._meta.fields
+            if field.name not in (
+                'id', 'friendly_name', 'therapist', 'date_added'
+            )
+        ]
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
         return reverse('ccf:client-detail', kwargs={'pk': self.pk})
+
+
+class Medical(models.Model):
+    # connect our user model to django's user model
+    # on delete, delete everything i.e. cascade
+    client = models.OneToOneField(Client, on_delete=models.CASCADE)
+    # TextField: multi-line text
+    conditions = models.TextField()
+    medication = models.TextField()
+    appearance = models.TextField()
+    peels = models.TextField()
+    # this will be updated when the note is edited
+    date_updated = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.client.friendly_name} Medical'
+
+    def get_detail_fields(self):
+        return [
+            (field.verbose_name, field.value_from_object(self))
+            for field in self._meta.fields
+            if field.name not in (
+                'id', 'client', 'date_updated'
+            )
+        ]
+
+    def get_absolute_url(self):
+        # page to redirect to after creating new object
+        return reverse('ccf:medical-detail', kwargs={'pk': self.pk})
 
 
 class Note(models.Model):
@@ -53,10 +88,6 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
-
-    def get_queryset(self):
-        client = get_object_or_404(client=self.kwargs.get('client'))
-        return Note.objects.filter(client=client).order_by('-date_updated')
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
@@ -73,10 +104,6 @@ class Treatment(models.Model):
 
     def __str__(self):
         return self.title
-
-    def get_queryset(self):
-        client = get_object_or_404(client=self.kwargs.get('client'))
-        return Note.objects.filter(client=client).order_by('-date_treated')
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
