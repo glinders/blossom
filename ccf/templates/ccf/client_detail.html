@@ -9,7 +9,6 @@
         {% if object.therapist == user %}
           <!-- the 'div' moves the update and delete button to the next line -->
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:client-update' object.id %}">Update</a>
             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'ccf:client-delete' object.id %}">Delete</a>
           </div>
         {% endif %}
@@ -32,7 +31,7 @@
       </ul>
       <div class="tab-content pt-2" id="tab-content">
         <div class="tab-pane active" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
-         <table>
+          <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in object.get_detail_fields %}
             <tr>
               <td>{{ label }}</td>
@@ -40,33 +39,36 @@
             </tr>
           {% endfor %}
           </table>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:client-update' object.id %}">Update</a>
         </div>
         <div class="tab-pane" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
-        <table>
+        <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for note in notes %}
           <tr>
-            <td>{{ note.title }}</td>
+            <td><a href="#">{{ note.title }}</a></td>
             <td>{{ note.content }}</td>
           </tr>
           {% empty %}
           Client has no notes
           {% endfor %}
         </table>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Add Note</a>
         </div>
         <div class="tab-pane" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
-        <table>
+        <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for treatment in treatments %}
           <tr>
-            <td>{{ treatment.title }}</td>
+            <td><a href="#">{{ treatment.title }}</a></td>
             <td>{{ treatment.content }}</td>
           </tr>
           {% empty %}
           Client has no treatments
           {% endfor %}
         </table>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Add Treatment</a>
         </div>
         <div class="tab-pane" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
-         <table>
+         <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in medical.get_detail_fields %}
             <tr>
               <td>{{ label }}</td>
@@ -74,6 +76,7 @@
             </tr>
           {% endfor %}
           </table>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Update</a>
         </div>
       </div>
     </div>
