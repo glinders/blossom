@@ -106,14 +106,11 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
             .filter(client=context['client'])
             .order_by('-date_treated')
         )
-        context['medical'] = (
-            Medical.objects
-            .filter(client=context['client'])[0]
-        )
-        data = context['medical']  # todo:test
-        print(f'medical:{data}')  # todo:test
-        print(f'      c:{data.conditions}')  # todo:test
-        print(f'     df:{data.get_detail_fields()}')  # todo:test
+        try:
+            medical_data = Medical.objects.filter(client=context['client'])[0]
+        except IndexError:
+            medical_data = None
+        context['medical'] = medical_data
         return context
 
 
