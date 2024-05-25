@@ -37,6 +37,7 @@ urlpatterns = [
 
             extra_context={
                 'title': 'New Client',
+                'model': 'Client',
                 'action': 'Add',
             },
         ),
@@ -48,6 +49,7 @@ urlpatterns = [
         views.ClientUpdateView.as_view(
             extra_context={
                 'title': 'Client Update',
+                'model': 'Client',
                 'action': 'Update',
             },
         ),
@@ -67,6 +69,7 @@ urlpatterns = [
         views.MedicalUpdateView.as_view(
             extra_context={
                 'title': 'Medical Update',
+                'model': 'Medical',
                 'action': 'Update',
             },
         ),

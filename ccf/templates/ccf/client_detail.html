@@ -13,7 +13,6 @@
             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'ccf:client-delete' object.id %}">Delete</a>
           </div>
         {% endif %}
-        <h1>tab_to_open:{{ tab_to_open|active_tab:"0" }}</h1>
       </div>
       <h2 class="article-title">{{ object.friendly_name }}</h2>
       <p class="article-content">{{ object.content }}</p>

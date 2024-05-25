@@ -129,10 +129,12 @@ class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class ClientCreateView(ClientDataView, LoginRequiredMixin, CreateView):
-    pass
+    template_name = 'ccf/generic_add_update_form.html'
 
 
 class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    template_name = 'ccf/generic_add_update_form.html'
+
     # used by UserPassesTestMixin
     def test_func(self):
         # get current client
@@ -143,7 +145,7 @@ class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, 
 
 class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Medical
-    template_name = 'ccf/medical_form.html'
+    template_name = 'ccf/generic_add_update_form.html'
     context_object_name = 'medical'
     fields = [
         'conditions',
