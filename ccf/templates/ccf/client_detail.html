@@ -39,7 +39,9 @@
             </tr>
           {% endfor %}
           </table>
+        {% if object.therapist == user %}
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:client-update' object.id %}">Update</a>
+        {% endif %}
         </div>
         <div class="tab-pane" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
@@ -78,7 +80,9 @@
           Client has no medical data
           {% endfor %}
           </table>
-          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Update</a>
+          {% if object.therapist == user %}
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:medical-update' object.id %}">Update</a>
+          {% endif %}
         </div>
       </div>
     </div>

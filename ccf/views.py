@@ -139,6 +139,42 @@ class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, 
         return self.request.user == client.therapist
 
 
+class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Medical
+    template_name = 'ccf/medical_form.html'
+    context_object_name = 'medical'
+    fields = [
+        'conditions',
+        'medication',
+        'appearance',
+        'peels',
+    ]
+    optional_fields = [
+        'conditions',
+        'medication',
+        'appearance',
+        'peels',
+    ]
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # account for optional fields
+        for f in self.optional_fields:
+            form.fields[f].required = False
+        return form
+
+    def form_valid(self, form):
+        form.instance.therapist = self.request.user
+        return super().form_valid(form)
+
+    # used by UserPassesTestMixin
+    def test_func(self):
+        # current user must be the therapist of the client to update it
+        medical = self.get_object()
+        client = medical.client
+        return self.request.user == client.therapist
+
+
 # function based view for the about page
 def about(request):
     context = {

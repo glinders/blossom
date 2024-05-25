@@ -24,7 +24,7 @@ urlpatterns = [
     ),
     # page to view single client
     path(
-        'client/<int:pk>/detail/',
+        'client/<int:pk>/detail/<int:tab>/',
         views.ClientDetailView.as_view(
             extra_context={'title': 'Client Detail'},
         ),
@@ -35,7 +35,10 @@ urlpatterns = [
         'client/new/',
         views.ClientCreateView.as_view(
 
-            extra_context={'title': 'New Client'},
+            extra_context={
+                'title': 'New Client',
+                'action': 'Add',
+            },
         ),
         name='client-create',
     ),
@@ -43,7 +46,10 @@ urlpatterns = [
     path(
         'client/<int:pk>/update/',
         views.ClientUpdateView.as_view(
-            extra_context={'title': 'Client Update'},
+            extra_context={
+                'title': 'Client Update',
+                'action': 'Update',
+            },
         ),
         name='client-update',
     ),
@@ -54,6 +60,17 @@ urlpatterns = [
             extra_context={'title': 'Client Delete'},
         ),
         name='client-delete',
+    ),
+    # page to update medical details of a client
+    path(
+        'client/<int:pk>/medical/update/',
+        views.MedicalUpdateView.as_view(
+            extra_context={
+                'title': 'Medical Update',
+                'action': 'Update',
+            },
+        ),
+        name='medical-update',
     ),
     # about page
     path(

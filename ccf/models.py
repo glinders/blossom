@@ -44,7 +44,10 @@ class Client(models.Model):
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
-        return reverse('ccf:client-detail', kwargs={'pk': self.pk})
+        return reverse(
+            'ccf:client-detail',
+            kwargs={'pk': self.pk, 'tab': 0},
+        )
 
 
 class Medical(models.Model):
@@ -52,10 +55,10 @@ class Medical(models.Model):
     # on delete, delete everything i.e. cascade
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
     # TextField: multi-line text
-    conditions = models.TextField()
-    medication = models.TextField()
-    appearance = models.TextField()
-    peels = models.TextField()
+    conditions = models.TextField(default='')
+    medication = models.TextField(default='')
+    appearance = models.TextField(default='')
+    peels = models.TextField(default='')
     # this will be updated when the note is edited
     date_updated = models.DateTimeField(default=timezone.now)
 
@@ -73,7 +76,10 @@ class Medical(models.Model):
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
-        return reverse('ccf:medical-detail', kwargs={'pk': self.pk})
+        return reverse(
+            'ccf:client-detail',
+            kwargs={'pk': self.pk, 'tab': 3},
+        )
 
 
 class Note(models.Model):
