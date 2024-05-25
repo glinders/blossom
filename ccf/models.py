@@ -75,8 +75,6 @@ class Medical(models.Model):
         ]
 
     def get_absolute_url(self):
-
-
         # page to redirect to after creating new object
         return reverse(
             'ccf:client-detail',

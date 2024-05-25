@@ -111,18 +111,8 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         except IndexError:
             medical_data = None
         context['medical'] = medical_data
-
-        context['tab_to_open'] = context['view'].kwargs['tab']  # todo:test
-
-        print(f'context:{context}')  # todo:test
-        view_context = context['view']  # todo:test
-        print(f'context[view]:{view_context.__dict__}')  # todo:test
-        object_kwargs = kwargs['object']  # todo:test
-        print(f'kwargs[object]:{dir(object_kwargs)}')  # todo:test
-
-
-
-
+        # add number of tab we want to activate
+        context['tab_to_open'] = context['view'].kwargs['tab']
         return context
 
 

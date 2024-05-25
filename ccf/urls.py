@@ -24,7 +24,7 @@ urlpatterns = [
     ),
     # page to view single client
     path(
-        'client/<int:pk>/detail/tab=<int:tab>/',
+        'client/<int:pk>/detail/<int:tab>/',
         views.ClientDetailView.as_view(
             extra_context={'title': 'Client Detail'},
         ),

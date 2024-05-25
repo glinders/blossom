@@ -9,7 +9,7 @@
           <!-- we use a filter on date_added to get desired formatting -->
           <small class="text-muted">{{ client.date_added|date:"d F, Y" }}</small>
         </div>
-        <h2><a class="article-title" href="{% url 'ccf:client-detail' client.id 0 %}">{{ client.friendly_name }}</a></h2>
+        <h2><a class="article-title" href="{% url 'ccf:client-detail' pk=client.id tab=0 %}">{{ client.friendly_name }}</a></h2>
         <!-- todo:show as list -->
         <p class="article-content">{{ client.friendly_name }}</p>
       </div>

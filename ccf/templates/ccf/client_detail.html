@@ -1,5 +1,6 @@
 {% extends "ccf/base.html" %}
 {% block content %}
+{% load custom_filters %}
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
@@ -12,26 +13,26 @@
             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'ccf:client-delete' object.id %}">Delete</a>
           </div>
         {% endif %}
-        <h1>tab_to_open:{{ tab_to_open }}|</h1>
+        <h1>tab_to_open:{{ tab_to_open|active_tab:"0" }}</h1>
       </div>
       <h2 class="article-title">{{ object.friendly_name }}</h2>
       <p class="article-content">{{ object.content }}</p>
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Details</a>
+          <a class="nav-link {{ tab_to_open|active_tab:'0' }}" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Details</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Notes</a>
+          <a class="nav-link {{ tab_to_open|active_tab:'1' }}" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Notes</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#simple-tabpanel-2" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Treatments</a>
+          <a class="nav-link {{ tab_to_open|active_tab:'2' }}" id="simple-tab-2" data-bs-toggle="tab" href="#simple-tabpanel-2" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Treatments</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="simple-tab-3" data-bs-toggle="tab" href="#simple-tabpanel-3" role="tab" aria-controls="simple-tabpanel-3" aria-selected="false">Medical</a>
+          <a class="nav-link {{ tab_to_open|active_tab:'3' }}" id="simple-tab-3" data-bs-toggle="tab" href="#simple-tabpanel-3" role="tab" aria-controls="simple-tabpanel-3" aria-selected="false">Medical</a>
         </li>
       </ul>
       <div class="tab-content pt-2" id="tab-content">
-        <div class="tab-pane active" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
+        <div class="tab-pane {{ tab_to_open|active_tab:'0' }}" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in object.get_detail_fields %}
             <tr>
@@ -44,7 +45,7 @@
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:client-update' object.id %}">Update</a>
         {% endif %}
         </div>
-        <div class="tab-pane" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
+        <div class="tab-pane {{ tab_to_open|active_tab:'1' }}" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for note in notes %}
           <tr>
@@ -57,7 +58,7 @@
           </table>
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Add Note</a>
         </div>
-        <div class="tab-pane" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
+        <div class="tab-pane {{ tab_to_open|active_tab:'2' }}" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for treatment in treatments %}
           <tr>
@@ -70,7 +71,7 @@
           </table>
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Add Treatment</a>
         </div>
-        <div class="tab-pane" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
+        <div class="tab-pane {{ tab_to_open|active_tab:'3' }}" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in medical.get_detail_fields %}
             <tr>
