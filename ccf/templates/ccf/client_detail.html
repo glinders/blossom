@@ -12,12 +12,13 @@
             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'ccf:client-delete' object.id %}">Delete</a>
           </div>
         {% endif %}
+        <h1>tab_to_open:{{ tab_to_open }}|</h1>
       </div>
       <h2 class="article-title">{{ object.friendly_name }}</h2>
       <p class="article-content">{{ object.content }}</p>
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Details</a>
+          <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Details</a>
         </li>
         <li class="nav-item" role="presentation">
           <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Notes</a>
@@ -26,7 +27,7 @@
           <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#simple-tabpanel-2" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Treatments</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="simple-tab-3" data-bs-toggle="tab" href="#simple-tabpanel-3" role="tab" aria-controls="simple-tabpanel-3" aria-selected="false">Medical</a>
+          <a class="nav-link active" id="simple-tab-3" data-bs-toggle="tab" href="#simple-tabpanel-3" role="tab" aria-controls="simple-tabpanel-3" aria-selected="false">Medical</a>
         </li>
       </ul>
       <div class="tab-content pt-2" id="tab-content">

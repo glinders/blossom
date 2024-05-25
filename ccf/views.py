@@ -95,7 +95,7 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # add all the Notes & Treatments for this client
+        # add all Notes, Treatments & Medical details for this client
         context['notes'] = (
             Note.objects
             .filter(client=context['client'])
@@ -111,6 +111,18 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         except IndexError:
             medical_data = None
         context['medical'] = medical_data
+
+        context['tab_to_open'] = context['view'].kwargs['tab']  # todo:test
+
+        print(f'context:{context}')  # todo:test
+        view_context = context['view']  # todo:test
+        print(f'context[view]:{view_context.__dict__}')  # todo:test
+        object_kwargs = kwargs['object']  # todo:test
+        print(f'kwargs[object]:{dir(object_kwargs)}')  # todo:test
+
+
+
+
         return context
 
 
