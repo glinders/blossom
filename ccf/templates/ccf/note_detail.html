@@ -1,0 +1,13 @@
+{% extends "ccf/base.html" %}
+{% block content %}
+{% load custom_filters %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <small class="text-muted">Last updated: {{ object.date_updated|date:"F d, Y" }}</small>
+      </div>
+      <h2 class="article-title">{{ object.title }}</h2>
+      <p class="article-content">{{ object.content }}</p>
+    </div>
+  </article>
+{% endblock content %}

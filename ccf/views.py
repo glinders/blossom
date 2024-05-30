@@ -118,13 +118,14 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
 
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Client
+    template_name = 'ccf/generic_confirm_delete.html'
     success_url = '/'
 
     # used by UserPassesTestMixin
     def test_func(self):
         # get current client
         client = self.get_object()
-        # user must be the therapist of the client to delete it
+        # user must be the therapist of the client to delete the client
         return self.request.user == client.therapist
 
 
@@ -139,7 +140,7 @@ class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, 
     def test_func(self):
         # get current client
         client = self.get_object()
-        # user must be the therapist of the client to update it
+        # user must be the therapist of the client to update client details
         return self.request.user == client.therapist
 
 
@@ -177,6 +178,49 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         medical = self.get_object()
         client = medical.client
         return self.request.user == client.therapist
+
+
+class NoteDataView:
+    model = Note
+    fields = [
+        'title',
+        'content',
+    ]
+    optional_fields = [
+        'content',
+    ]
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        for f in self.optional_fields:
+            form.fields[f].required = False
+        return form
+
+    def form_valid(self, form):
+        # we have to set the ID of the client,
+        # the forms takes care of the other fields
+        form.instance.client_id = self.kwargs.get('pk')
+        return super().form_valid(form)
+
+    # used by UserPassesTestMixin
+    def test_func(self):
+        # get current client
+        client = self.get_object()
+        # user must be the therapist of the client to access a note
+        return self.request.user == client.therapist
+
+
+class NoteCreateView(NoteDataView, LoginRequiredMixin, CreateView):
+    template_name = 'ccf/generic_add_update_form.html'
+
+
+class NoteUpdateView(NoteDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    template_name = 'ccf/generic_add_update_form.html'
+
+
+class NoteDetailView(LoginRequiredMixin, DetailView):
+    model = Note
+    fields = "__all__"
 
 
 # function based view for the about page

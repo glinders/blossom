@@ -97,7 +97,13 @@ class Note(models.Model):
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
-        return reverse('ccf:note-detail', kwargs={'pk': self.pk})
+        return reverse(
+            'ccf:note-detail',
+            kwargs={
+                'pk': self.pk,
+                'note': 4,  # todo:test
+            }
+        )
 
 
 class Treatment(models.Model):
@@ -113,4 +119,4 @@ class Treatment(models.Model):
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
-        return reverse('ccf:note-detail', kwargs={'pk': self.pk})
+        return reverse('ccf:treatment-detail', kwargs={'pk': self.pk})

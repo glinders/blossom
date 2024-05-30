@@ -48,14 +48,16 @@
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for note in notes %}
           <tr>
-            <td><a href="#">{{ note.title }}</a></td>
+            <td><a href="{% url 'ccf:note-detail' object.id note.id %}">{{ note.title }}</a></td>
             <td>{{ note.content }}</td>
           </tr>
           {% empty %}
           Client has no notes
           {% endfor %}
           </table>
-          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Add Note</a>
+          {% if object.therapist == user %}
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:note-create' object.id %}">Add Note</a>
+          {% endif %}
         </div>
         <div class="tab-pane {{ tab_to_open|active_tab:'2' }}" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
           <table class="table table-sm table-hover table-bordered" style="width:auto">

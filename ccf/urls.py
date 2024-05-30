@@ -22,7 +22,8 @@ urlpatterns = [
         ),
         name='user-clients',
     ),
-    # page to view single client
+    # page to view single client; this is a tabbed view
+    # <int:tab> selects the tab to show
     path(
         'client/<int:pk>/detail/<int:tab>/',
         views.ClientDetailView.as_view(
@@ -34,7 +35,6 @@ urlpatterns = [
     path(
         'client/new/',
         views.ClientCreateView.as_view(
-
             extra_context={
                 'title': 'New Client',
                 'model': 'Client',
@@ -59,7 +59,10 @@ urlpatterns = [
     path(
         'client/<int:pk>/delete/',
         views.ClientDeleteView.as_view(
-            extra_context={'title': 'Client Delete'},
+            extra_context={
+                'title': 'Client Delete',
+                'model': 'Client',
+            },
         ),
         name='client-delete',
     ),
@@ -74,6 +77,38 @@ urlpatterns = [
             },
         ),
         name='medical-update',
+    ),
+    # page to create a note for a client
+    path(
+        'client/<int:pk>/note/new/',
+        views.NoteCreateView.as_view(
+            extra_context={
+                'title': 'New Note',
+                'model': 'Note',
+                'action': 'Add',
+            },
+        ),
+        name='note-create',
+    ),
+    # page to update a note for a client
+    path(
+        'client/<int:pk>/note/<int:note>/update/',
+        views.NoteUpdateView.as_view(
+            extra_context={
+                'title': 'Note Update',
+                'model': 'Note',
+                'action': 'Update',
+            },
+        ),
+        name='note-update',
+    ),
+    # page to view a note for a client
+    path(
+        'client/<int:pk>/note/<int:note>/detail/',
+        views.NoteDetailView.as_view(
+            extra_context={'title': 'Note Detail'},
+        ),
+        name='note-detail',
     ),
     # about page
     path(
