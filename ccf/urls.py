@@ -80,7 +80,7 @@ urlpatterns = [
     ),
     # page to create a note for a client
     path(
-        'client/<int:pk>/note/new/',
+        'client/<int:client_id>/note/new/',
         views.NoteCreateView.as_view(
             extra_context={
                 'title': 'New Note',
@@ -92,7 +92,7 @@ urlpatterns = [
     ),
     # page to update a note for a client
     path(
-        'client/<int:pk>/note/<int:note>/update/',
+        'client/<int:client_id>/note/<int:pk>/update/',
         views.NoteUpdateView.as_view(
             extra_context={
                 'title': 'Note Update',
@@ -104,7 +104,7 @@ urlpatterns = [
     ),
     # page to view a note for a client
     path(
-        'client/<int:pk>/note/<int:note>/detail/',
+        'client/<int:client_id>/note/<int:pk>/detail/',
         views.NoteDetailView.as_view(
             extra_context={'title': 'Note Detail'},
         ),

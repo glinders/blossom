@@ -4,10 +4,14 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <small class="text-muted">Last updated: {{ object.date_updated|date:"F d, Y" }}</small>
+        <a class="mr-2" href="{% url 'ccf:client-detail' pk=object.client.id tab=1 %}">{{ object.client }}</a>
+        <small class="text-muted">Last updated: {{ object.date_updated|date:"d F, Y" }}</small>
       </div>
       <h2 class="article-title">{{ object.title }}</h2>
       <p class="article-content">{{ object.content }}</p>
-    </div>
+      </div>
+      {% if object.therapist != user %}
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:note-update' client_id=object.client.id pk=object.id %}">Update</a>
+      {% endif %}
   </article>
 {% endblock content %}

@@ -98,10 +98,10 @@ class Note(models.Model):
     def get_absolute_url(self):
         # page to redirect to after creating new object
         return reverse(
-            'ccf:note-detail',
+            'ccf:client-detail',
             kwargs={
-                'pk': self.pk,
-                'note': 4,  # todo:test
+                'pk': self.client_id,
+                'tab': 1,  # todo:replace magic tab numbers; also in templates
             }
         )
 

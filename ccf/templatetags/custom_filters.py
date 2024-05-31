@@ -9,3 +9,12 @@ def active_tab(tab_to_open, tab):
         return 'active'
     else:
         return ''
+
+
+@register.filter(name='truncate_field')
+def truncate_field(content, limit):
+    limit = int(limit)
+    if len(content) <= limit:
+        return content
+    else:
+        return content[:limit]+'...'

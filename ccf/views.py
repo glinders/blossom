@@ -1,3 +1,6 @@
+from django.utils import (
+    timezone
+)
 from django.shortcuts import (
     render,
     get_object_or_404,
@@ -20,6 +23,7 @@ from bootstrap_datepicker_plus.widgets import (
 from .models import (
     Client, Note, Treatment, Medical,
 )
+from django.utils.decorators import classonlymethod  # todo:test
 
 
 # class based view for the home page
@@ -197,15 +201,22 @@ class NoteDataView:
         return form
 
     def form_valid(self, form):
+        print('GOTCHA form_valid')  # todo:test
+        print(f'self.kwargs:{self.kwargs}')  # todo:test
         # we have to set the ID of the client,
         # the forms takes care of the other fields
-        form.instance.client_id = self.kwargs.get('pk')
+        form.instance.client_id = self.kwargs.get('client_id')
+        form.instance.date_updated = timezone.now()
         return super().form_valid(form)
 
     # used by UserPassesTestMixin
     def test_func(self):
         # get current client
-        client = self.get_object()
+        _object = self.get_object()
+        if isinstance(_object, Client):
+            client = _object
+        if isinstance(_object, Note):
+            client = _object.client
         # user must be the therapist of the client to access a note
         return self.request.user == client.therapist
 
@@ -221,6 +232,13 @@ class NoteUpdateView(NoteDataView, LoginRequiredMixin, UserPassesTestMixin, Upda
 class NoteDetailView(LoginRequiredMixin, DetailView):
     model = Note
     fields = "__all__"
+
+    # example how to override the as_view method in class based views
+    @classonlymethod
+    def as_view(cls, **initkwargs):
+        self = cls(**initkwargs)
+        view = super(NoteDetailView, cls).as_view(**initkwargs)
+        return view
 
 
 # function based view for the about page
