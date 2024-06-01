@@ -17,7 +17,7 @@ class Client(models.Model):
     # each attribute corresponds to a field in the table
     #
     # CharField: single-line text
-    friendly_name = models.CharField(max_length=24)
+    display_name = models.CharField(max_length=24)
     # timezone.now: time when client is added
     date_added = models.DateTimeField(default=timezone.now)
     # CASCADE: if user is deleted, then all clients will be deleted as well
@@ -31,19 +31,19 @@ class Client(models.Model):
     dob = models.DateField(default=get_default_date)
 
     def __str__(self):
-        return self.friendly_name
+        return self.display_name
 
     def get_detail_fields(self):
         return [
             (field.verbose_name, field.value_from_object(self))
             for field in self._meta.fields
             if field.name not in (
-                'id', 'friendly_name', 'therapist', 'date_added'
+                'id', 'display_name', 'therapist', 'date_added'
             )
         ]
 
+    # return the canonical URL for an object
     def get_absolute_url(self):
-        # page to redirect to after creating new object
         return reverse(
             'ccf:client-detail',
             kwargs={'pk': self.pk, 'tab': 0},
@@ -63,7 +63,7 @@ class Medical(models.Model):
     date_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f'{self.client.friendly_name} Medical'
+        return f'{self.client.display_name} Medical'
 
     def get_detail_fields(self):
         return [
@@ -95,10 +95,15 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
+    # generic templates use 'object.display_name' to refer to the instance name
+    @property
+    def display_name(self):
+        return self.title
+
     def get_absolute_url(self):
         # page to redirect to after creating new object
         return reverse(
-            'ccf:client-detail',
+            'ccf:client-detail',  # todo:replace with note-detail
             kwargs={
                 'pk': self.client_id,
                 'tab': 1,  # todo:replace magic tab numbers; also in templates
@@ -115,6 +120,11 @@ class Treatment(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def __str__(self):
+        return self.title
+
+    # generic templates use 'object.display_name' to refer to the instance name
+    @property
+    def display_name(self):
         return self.title
 
     def get_absolute_url(self):

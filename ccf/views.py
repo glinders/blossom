@@ -23,25 +23,32 @@ from bootstrap_datepicker_plus.widgets import (
 from .models import (
     Client, Note, Treatment, Medical,
 )
-from django.utils.decorators import classonlymethod  # todo:test
+from django.utils.decorators import classonlymethod
+from django.urls import (
+    reverse
+)
 
 
 # class based view for the home page
-# by default looks for a template of the form:
+# class based views by default look for a template of the form:
 #   <app>/<model>_<viewtype>.html
 # for our class ClientListView this would be:
 #   ccf/client_list.html
-# we can pass our own name by setting attribute template_name
+# we can however pass our own name by setting attribute template_name
 class ClientListView(LoginRequiredMixin, ListView):
     # model that is going to be displayed as a list
     model = Client
+    # our template name
     template_name = 'ccf/home.html'
-    # specify the name for our list objects that we use in our template
+    # the default name for the objests to pass to the template is 'object'
+    # we specify our own name for our list objects that we use in our template
     # the class based view will by default pass all objects of our model
     # i.e. Client.objects.all()
     context_object_name = 'clients'
     # order our clients by date in reversed order (using a '-') to get the
     # newest clients first i.e. at the top of the page
+    # todo:order alphabetically
+    # todo:show compact, scrollable list
     ordering = ['-date_added']
     # turn on paginator and show a limited number of pages
     paginate_by = 5
@@ -52,6 +59,8 @@ class UserClientListView(LoginRequiredMixin, ListView):
     template_name = 'ccf/user_clients.html'
     context_object_name = 'clients'
     paginate_by = 5
+    # todo:order alphabetically
+    # todo:show compact, scrollable list
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -61,7 +70,7 @@ class UserClientListView(LoginRequiredMixin, ListView):
 class ClientDataView:
     model = Client
     fields = [
-        'friendly_name',
+        'display_name',
         'full_name',
         'address',
         'mobile',
@@ -94,7 +103,7 @@ class ClientDataView:
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
-    fields = "__all__"
+    fields = '__all__'
 
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
@@ -123,7 +132,10 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Client
     template_name = 'ccf/generic_confirm_delete.html'
-    success_url = '/'
+
+    # page to redirect to after client is deleted; user list view
+    def get_success_url(self):
+        return reverse('ccf:user-clients', args=[self.request.user.username])
 
     # used by UserPassesTestMixin
     def test_func(self):
@@ -239,6 +251,32 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
         self = cls(**initkwargs)
         view = super(NoteDetailView, cls).as_view(**initkwargs)
         return view
+
+
+class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Note
+    template_name = 'ccf/generic_confirm_delete.html'
+
+    # page to redirect to after client is deleted; user list view
+    def get_success_url(self):
+        return reverse(
+            'ccf:client-detail',
+            kwargs={
+                'pk': self.object.client_id,
+                'tab': 1,
+            }
+        )
+
+    # used by UserPassesTestMixin
+    def test_func(self):
+        # get current client
+        _object = self.get_object()
+        if isinstance(_object, Client):
+            client = _object
+        if isinstance(_object, Note):
+            client = _object.client
+        # user must be the therapist of the client to access a note
+        return self.request.user == client.therapist
 
 
 # function based view for the about page

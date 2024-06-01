@@ -62,6 +62,7 @@ urlpatterns = [
             extra_context={
                 'title': 'Client Delete',
                 'model': 'Client',
+                'name': 'display_name'
             },
         ),
         name='client-delete',
@@ -109,6 +110,18 @@ urlpatterns = [
             extra_context={'title': 'Note Detail'},
         ),
         name='note-detail',
+    ),
+    # page to delete a note
+    path(
+        'client/<int:client_id>/note/<int:pk>/delete/',
+        views.NoteDeleteView.as_view(
+            extra_context={
+                'title': 'Note Delete',
+                'model': 'Note',
+                'name': 'title'
+            },
+        ),
+        name='note-delete',
     ),
     # about page
     path(

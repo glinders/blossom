@@ -11,6 +11,7 @@ def active_tab(tab_to_open, tab):
         return ''
 
 
+# could instead have used builtin filter 'truncatechars'
 @register.filter(name='truncate_field')
 def truncate_field(content, limit):
     limit = int(limit)

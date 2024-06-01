@@ -10,7 +10,7 @@
         <small class="text-muted">since {{ object.date_added|date:"d F, Y" }}</small>
         <!-- the 'div' moves the button to the next line -->
         <div>
-          <h2 style="display:inline" class="article-title">{{ object.friendly_name }}</h2>
+          <h2 style="display:inline" class="article-title">{{ object.display_name }}</h2>
           {% if object.therapist == user %}
             <a class="btn btn-danger btn-sm mt-0 mb-1" href="{% url 'ccf:client-delete' object.id %}">Delete Client</a>
           {% endif %}
