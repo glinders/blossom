@@ -213,10 +213,8 @@ class NoteDataView:
         return form
 
     def form_valid(self, form):
-        print('GOTCHA form_valid')  # todo:test
-        print(f'self.kwargs:{self.kwargs}')  # todo:test
-        # we have to set the ID of the client,
-        # the forms takes care of the other fields
+        # we have to set the ID of the client and the data,
+        # the form takes care of the other fields
         form.instance.client_id = self.kwargs.get('client_id')
         form.instance.date_updated = timezone.now()
         return super().form_valid(form)

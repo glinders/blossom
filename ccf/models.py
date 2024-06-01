@@ -46,7 +46,7 @@ class Client(models.Model):
     def get_absolute_url(self):
         return reverse(
             'ccf:client-detail',
-            kwargs={'pk': self.pk, 'tab': 0},
+            kwargs={'pk': self.pk, 'tab': 0},  # todo:replace magic tab numbers; also in templates
         )
 
 
@@ -78,7 +78,7 @@ class Medical(models.Model):
         # page to redirect to after creating new object
         return reverse(
             'ccf:client-detail',
-            kwargs={'pk': self.pk, 'tab': 3},
+            kwargs={'pk': self.pk, 'tab': 3},  # todo:replace magic tab numbers; also in templates
         )
 
 
@@ -103,10 +103,10 @@ class Note(models.Model):
     def get_absolute_url(self):
         # page to redirect to after creating new object
         return reverse(
-            'ccf:client-detail',  # todo:replace with note-detail
+            'ccf:note-detail',
             kwargs={
-                'pk': self.client_id,
-                'tab': 1,  # todo:replace magic tab numbers; also in templates
+                'client_id': self.client_id,
+                'pk': self.pk,
             }
         )
 
