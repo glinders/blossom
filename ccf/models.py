@@ -6,6 +6,7 @@ from django.shortcuts import (
     get_object_or_404,
 )
 import datetime
+import ccf.symbols
 
 
 def get_default_date():
@@ -46,7 +47,7 @@ class Client(models.Model):
     def get_absolute_url(self):
         return reverse(
             'ccf:client-detail',
-            kwargs={'pk': self.pk, 'tab': 0},  # todo:replace magic tab numbers; also in templates
+            kwargs={'pk': self.pk, 'tab': ccf.symbols.CLIENT_TAB_DETAILS},
         )
 
 
@@ -78,7 +79,7 @@ class Medical(models.Model):
         # page to redirect to after creating new object
         return reverse(
             'ccf:client-detail',
-            kwargs={'pk': self.pk, 'tab': 3},  # todo:replace magic tab numbers; also in templates
+            kwargs={'pk': self.pk, 'tab': ccf.symbols.CLIENT_TAB_MEDICAL},
         )
 
 

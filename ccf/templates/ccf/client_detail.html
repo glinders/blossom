@@ -31,7 +31,7 @@
         </li>
       </ul>
       <div class="tab-content pt-2" id="tab-content">
-        <div class="tab-pane {{ tab_to_open|active_tab:'0' }}" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_DETAILS }}" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in object.get_detail_fields %}
             <tr>
@@ -44,7 +44,7 @@
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:client-update' object.id %}">Update</a>
         {% endif %}
         </div>
-        <div class="tab-pane {{ tab_to_open|active_tab:'1' }}" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_NOTES }}" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for note in notes %}
           <tr>
@@ -59,7 +59,7 @@
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:note-create' object.id %}">Add Note</a>
           {% endif %}
         </div>
-        <div class="tab-pane {{ tab_to_open|active_tab:'2' }}" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_TREATMENTS }}" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for treatment in treatments %}
           <tr>
@@ -72,7 +72,7 @@
           </table>
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Add Treatment</a>
         </div>
-        <div class="tab-pane {{ tab_to_open|active_tab:'3' }}" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_MEDICAL }}" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in medical.get_detail_fields %}
             <tr>

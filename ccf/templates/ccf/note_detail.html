@@ -4,7 +4,7 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{% url 'ccf:client-detail' pk=object.client.id tab=1 %}">{{ object.client }}</a>
+        <a class="mr-2" href="{% url 'ccf:client-detail' pk=object.client.id tab=CLIENT_TAB_NOTES %}">{{ object.client }}</a>
         <small class="text-muted">Last updated: {{ object.date_updated|date:"d F, Y" }}</small>
       </div>
       <h2 class="article-title">{{ object.title }}</h2>
