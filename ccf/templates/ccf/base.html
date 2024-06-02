@@ -26,7 +26,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
-              <a class="nav-item nav-link" href="{% url 'ccf:home' %}">Home</a>
+              <a class="nav-item nav-link" href="{% url 'ccf:user-clients' request.user %}">Home</a>
               <a class="nav-item nav-link" href="{% url 'ccf:about' %}">About</a>
               {% if request.user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'ccf:client-create' %}">New Client</a>
