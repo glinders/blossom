@@ -104,7 +104,7 @@ class Note(models.Model):
     def get_absolute_url(self):
         # page to redirect to after creating new object
         return reverse(
-            'ccf:note-detail',
+            'ccf:generic-detail',
             kwargs={
                 'client_id': self.client_id,
                 'pk': self.pk,

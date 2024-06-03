@@ -62,7 +62,7 @@ urlpatterns = [
             extra_context={
                 'title': 'Client Delete',
                 'model': 'Client',
-                'name': 'display_name'
+                'name': 'display_name',
             },
         ),
         name='client-delete',
@@ -107,9 +107,14 @@ urlpatterns = [
     path(
         'client/<int:client_id>/note/<int:pk>/detail/',
         views.NoteDetailView.as_view(
-            extra_context={'title': 'Note Detail'},
+            extra_context={
+                'title': 'Note Detail',
+                'model': 'Note',
+                'update_url': 'ccf:note-update',
+                'delete_url': 'ccf:note-delete',
+            },
         ),
-        name='note-detail',
+        name='generic-detail',
     ),
     # page to delete a note
     path(
@@ -118,7 +123,7 @@ urlpatterns = [
             extra_context={
                 'title': 'Note Delete',
                 'model': 'Note',
-                'name': 'title'
+                'name': 'title',
             },
         ),
         name='note-delete',

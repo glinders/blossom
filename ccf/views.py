@@ -24,6 +24,8 @@ from django.urls import (
 from bootstrap_datepicker_plus.widgets import (
     DatePickerInput,
 )
+
+import ccf.symbols
 from .models import (
     Client, Note, Treatment, Medical,
 )
@@ -249,6 +251,7 @@ class NoteUpdateView(NoteDataView, LoginRequiredMixin, UserPassesTestMixin, Upda
 
 
 class NoteDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'ccf/generic_detail.html'
     model = Note
     fields = "__all__"
 
@@ -270,7 +273,7 @@ class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             'ccf:client-detail',
             kwargs={
                 'pk': self.object.client_id,
-                'tab': 1,
+                'tab': ccf.symbols.CLIENT_TAB_NOTES,
             }
         )
 

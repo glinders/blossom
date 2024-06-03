@@ -48,7 +48,7 @@
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for note in notes %}
           <tr>
-            <td><a href="{% url 'ccf:note-detail' client_id=object.id pk=note.id %}">{{ note.title }}</a></td>
+            <td><a href="{% url 'ccf:generic-detail' client_id=object.id pk=note.id %}">{{ note.title }}</a></td>
             <td>{{ note.content|truncate_field:'40' }}</td>
           </tr>
           {% empty %}

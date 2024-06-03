@@ -11,8 +11,8 @@
       <p class="article-content">{{ object.content }}</p>
       </div>
       {% if object.client.therapist == user %}
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:note-update' client_id=object.client.id pk=object.id %}">Update</a>
-        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'ccf:note-delete' client_id=object.client.id pk=object.id %}">Delete</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url update_url client_id=object.client.id pk=object.id %}">Update</a>
+        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url delete_url client_id=object.client.id pk=object.id %}">Delete</a>
       {% endif %}
   </article>
 {% endblock content %}
