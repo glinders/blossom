@@ -17,17 +17,19 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from django.utils.decorators import classonlymethod
+from django.urls import (
+    reverse
+)
 from bootstrap_datepicker_plus.widgets import (
     DatePickerInput,
 )
 from .models import (
     Client, Note, Treatment, Medical,
 )
-from django.utils.decorators import classonlymethod
-from django.urls import (
-    reverse
+from .filters import (
+    ClientFilter,
 )
-
 
 # class based view for the home page
 # class based views by default look for a template of the form:
@@ -59,12 +61,19 @@ class UserClientListView(LoginRequiredMixin, ListView):
     template_name = 'ccf/user_clients.html'
     context_object_name = 'clients'
     paginate_by = 5
-    # todo:order alphabetically
     # todo:show compact, scrollable list
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Client.objects.filter(therapist=user).order_by('-date_added')
+        clients = Client.objects.filter(therapist=user).order_by('display_name')
+        self.filterset = ClientFilter(self.request.GET, queryset=clients)
+        return self.filterset.qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['form'] = self.filterset.form
+        pass
+        return context
 
 
 class ClientDataView:

@@ -10,7 +10,6 @@ CLIENT_TAB_MEDICAL = '3'
 
 
 def template_symbols(request):
-    print('GOTCHA')  # todo:test
     return {
         'CCF_APP_VERSION': CCF_APP_VERSION,
         'CLIENT_TAB_DETAILS': CLIENT_TAB_DETAILS,
