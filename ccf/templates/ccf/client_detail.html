@@ -48,7 +48,7 @@
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for note in notes %}
           <tr>
-            <td><a href="{% url 'ccf:generic-detail' client_id=object.id pk=note.id %}">{{ note.title }}</a></td>
+            <td><a href="{% url 'ccf:note-detail' client_id=object.id pk=note.id %}">{{ note.title }}</a></td>
             <td>{{ note.content|truncate_field:'40' }}</td>
           </tr>
           {% empty %}
@@ -63,14 +63,14 @@
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for treatment in treatments %}
           <tr>
-            <td><a href="#">{{ treatment.title }}</a></td>
-            <td>{{ treatment.content }}</td>
+            <td><a href="{% url 'ccf:treatment-detail' client_id=object.id pk=treatment.id %}">{{ treatment.title }}</a></td>
+            <td>{{ treatment.content|truncate_field:'40' }}</td>
           </tr>
           {% empty %}
           Client has no treatments
           {% endfor %}
           </table>
-          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Add Treatment</a>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:treatment-create' object.id %}">Add Treatment</a>
         </div>
         <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_MEDICAL }}" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
           <table class="table table-sm table-hover table-bordered" style="width:auto">

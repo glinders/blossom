@@ -104,7 +104,7 @@ class Note(models.Model):
     def get_absolute_url(self):
         # page to redirect to after creating new object
         return reverse(
-            'ccf:generic-detail',
+            'ccf:note-detail',
             kwargs={
                 'client_id': self.client_id,
                 'pk': self.pk,
@@ -130,4 +130,10 @@ class Treatment(models.Model):
 
     def get_absolute_url(self):
         # page to redirect to after creating new object
-        return reverse('ccf:treatment-detail', kwargs={'pk': self.pk})
+        return reverse(
+            'ccf:treatment-detail',
+            kwargs={
+                'client_id': self.client_id,
+                'pk': self.pk,
+            }
+        )

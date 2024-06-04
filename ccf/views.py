@@ -207,8 +207,7 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == client.therapist
 
 
-class NoteDataView:
-    model = Note
+class GenericDataView:
     fields = [
         'title',
         'content',
@@ -236,10 +235,14 @@ class NoteDataView:
         _object = self.get_object()
         if isinstance(_object, Client):
             client = _object
-        if isinstance(_object, Note):
+        else:
             client = _object.client
         # user must be the therapist of the client to access a note
         return self.request.user == client.therapist
+
+
+class NoteDataView(GenericDataView):
+    model = Note
 
 
 class NoteCreateView(NoteDataView, LoginRequiredMixin, CreateView):
@@ -286,6 +289,57 @@ class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if isinstance(_object, Note):
             client = _object.client
         # user must be the therapist of the client to access a note
+        return self.request.user == client.therapist
+
+
+class TreatmentDataView(GenericDataView):
+    model = Treatment
+
+
+class TreatmentCreateView(TreatmentDataView, LoginRequiredMixin, CreateView):
+    template_name = 'ccf/generic_add_update_form.html'
+
+
+class TreatmentUpdateView(TreatmentDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    template_name = 'ccf/generic_add_update_form.html'
+
+
+class TreatmentDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'ccf/generic_detail.html'
+    model = Treatment
+    fields = "__all__"
+
+    # example how to override the as_view method in class based views
+    @classonlymethod
+    def as_view(cls, **initkwargs):
+        self = cls(**initkwargs)
+        view = super(TreatmentDetailView, cls).as_view(**initkwargs)
+        return view
+
+
+class TreatmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Treatment
+    template_name = 'ccf/generic_confirm_delete.html'
+
+    # page to redirect to after client is deleted; user list view
+    def get_success_url(self):
+        return reverse(
+            'ccf:client-detail',
+            kwargs={
+                'pk': self.object.client_id,
+                'tab': ccf.symbols.CLIENT_TAB_TREATMENTS,
+            }
+        )
+
+    # used by UserPassesTestMixin
+    def test_func(self):
+        # get current client
+        _object = self.get_object()
+        if isinstance(_object, Client):
+            client = _object
+        if isinstance(_object, Treatment):
+            client = _object.client
+        # user must be the therapist of the client to access a treatment
         return self.request.user == client.therapist
 
 
