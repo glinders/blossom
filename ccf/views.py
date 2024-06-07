@@ -33,6 +33,7 @@ from .filters import (
     ClientFilter,
 )
 
+
 # class based view for the home page
 # class based views by default look for a template of the form:
 #   <app>/<model>_<viewtype>.html

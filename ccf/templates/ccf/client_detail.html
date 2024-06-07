@@ -70,7 +70,9 @@
           Client has no treatments
           {% endfor %}
           </table>
+          {% if object.therapist == user %}
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:treatment-create' object.id %}">Add Treatment</a>
+          {% endif %}
         </div>
         <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_MEDICAL }}" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
           <table class="table table-sm table-hover table-bordered" style="width:auto">

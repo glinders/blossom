@@ -5,7 +5,12 @@
     <div class="media-body">
       <div class="article-metadata">
         <a class="mr-2" href="{% url 'ccf:client-detail' pk=object.client.id tab=client_tab %}">{{ object.client }}</a>
-        <small class="text-muted">Last updated: {{ object.date_updated|date:"d F, Y" }}</small>
+        {% if object.date_updated %}
+          <small class="text-muted">Last updated: {{ object.date_updated|date:"d F, Y" }}</small>
+        {% endif %}
+        {% if object.date_treated %}
+          <small class="text-muted">Treatment date: {{ object.date_treated|date:"d F, Y" }}</small>
+        {% endif %}
       </div>
       <h2 class="article-title">{{ object.title }}</h2>
       <p class="article-content">{{ object.content }}</p>

@@ -21,7 +21,7 @@ urlpatterns = [
     ),
     path(
         'login/',
-        auth_views.LoginView.as_view(
+        views.MyLoginView.as_view(
             template_name='users/login.html',
             extra_context={'title': 'Login'},
         ),

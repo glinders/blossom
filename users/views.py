@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.conf import settings
+from django.urls import reverse
 from .forms import (
     UserRegisterForm, UserUpdateForm, ProfileUpdateForm,
 )
@@ -73,3 +75,11 @@ def profile(request):
         'p_form': p_form,
     }
     return render(request, 'users/profile.html', context)
+
+
+class MyLoginView(LoginView):
+
+    # page to redirect to after client is logged in; user list view
+    def get_success_url(self):
+        return reverse('ccf:user-clients', args=[self.request.user.username])
+
