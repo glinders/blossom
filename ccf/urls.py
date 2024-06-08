@@ -38,6 +38,7 @@ urlpatterns_notes = [
             extra_context={
                 'title': 'Note Detail',
                 'model': 'Note',
+                'return_url': 'ccf:client-detail',
                 'update_url': 'ccf:note-update',
                 'delete_url': 'ccf:note-delete',
                 'client_tab': ccf.symbols.CLIENT_TAB_NOTES,
@@ -91,6 +92,7 @@ urlpatterns_treatments = [
             extra_context={
                 'title': 'Treatment Detail',
                 'model': 'Treatment',
+                'return_url': 'ccf:client-detail',
                 'update_url': 'ccf:treatment-update',
                 'delete_url': 'ccf:treatment-delete',
                 'client_tab': ccf.symbols.CLIENT_TAB_TREATMENTS,

@@ -43,7 +43,7 @@ if os.getenv("DJANGO_DEBUG_FLAG_TRUE") is not None:
 
 # settings for DEBUG and for production
 if DEBUG:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['10.1.1.100', '127.0.0.1', ]
 else:
     ALLOWED_HOSTS = ['*', ]
     SECURE_SSL_REDIRECT = True
