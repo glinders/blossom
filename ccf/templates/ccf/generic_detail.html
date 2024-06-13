@@ -4,21 +4,21 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{% url return_url pk=object.client.id tab=client_tab %}">{{ object.client }}</a>
-        {% if object.date_updated %}
-          <small class="text-muted">Last updated: {{ object.date_updated|date:"d F, Y" }}</small>
+        <a class="mr-2" href="{% url cancel_url client_id=generic_object.client.id tab=client_tab %}">{{ generic_object.client }}</a>
+        {% if generic_object.date_updated %}
+          <small class="text-muted">Last updated: {{ generic_object.date_updated|date:"d F, Y" }}</small>
         {% endif %}
-        {% if object.date_treated %}
-          <small class="text-muted">Treatment date: {{ object.date_treated|date:"d F, Y" }}</small>
+        {% if generic_object.date_treated %}
+          <small class="text-muted">Treatment date: {{ generic_object.date_treated|date:"d F, Y" }}</small>
         {% endif %}
       </div>
-      <h3 class="article-title">{{ object.title }}</h3>
-      <p class="article-content">{{ object.content }}</p>
+      <h5 class="article-title">{{ generic_object.title }}</h5>
+      <p class="article-content">{{ generic_object.content }}</p>
       </div>
-        <a class="btn btn-outline-secondary btn-sm mt-1 mb-1" href="{% url return_url pk=object.client.id tab=client_tab %}">Return</a>
-      {% if object.client.therapist == user %}
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url update_url client_id=object.client.id pk=object.id %}">Update</a>
-        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url delete_url client_id=object.client.id pk=object.id %}">Delete</a>
+        <a class="btn btn-outline-secondary btn-sm mt-1 mb-1" href="{% url cancel_url client_id=generic_object.client.id tab=client_tab %}">Return</a>
+      {% if generic_object.client.therapist == user %}
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url update_url client_id=generic_object.client.id pk=generic_object.id %}">Update</a>
+        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url delete_url client_id=generic_object.client.id pk=generic_object.id %}">Delete</a>
       {% endif %}
   </article>
 {% endblock content %}

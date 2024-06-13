@@ -41,8 +41,6 @@ from .filters import (
 #   ccf/client_list.html
 # we can however pass our own name by setting attribute template_name
 class ClientListView(LoginRequiredMixin, ListView):
-    # model that is going to be displayed as a list
-    model = Client
     # our template name
     template_name = 'ccf/home.html'
     # the default name for the objests to pass to the template is 'object'
@@ -50,6 +48,8 @@ class ClientListView(LoginRequiredMixin, ListView):
     # the class based view will by default pass all objects of our model
     # i.e. Client.objects.all()
     context_object_name = 'clients'
+    # model that is going to be displayed as a list
+    model = Client
     # order our clients by date in reversed order (using a '-') to get the
     # newest clients first i.e. at the top of the page
     # todo:order alphabetically
@@ -60,9 +60,9 @@ class ClientListView(LoginRequiredMixin, ListView):
 
 
 class UserClientListView(LoginRequiredMixin, ListView):
-    model = Client
     template_name = 'ccf/user_clients.html'
     context_object_name = 'clients'
+    model = Client
     paginate_by = 5
     # todo:show compact, scrollable list
 
@@ -75,7 +75,6 @@ class UserClientListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context['form'] = self.filterset.form
-        pass
         return context
 
 
@@ -100,6 +99,16 @@ class ClientDataView:
         'profession',
     ]
 
+    # todo:test:added for testing
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset=queryset)
+        return object
+
+    # todo:test:added for testing
+    def get(self, request, *args, **kwargs):
+        result = super().get(request, *args, **kwargs)
+        return result
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         for f in self.optional_fields:
@@ -116,6 +125,7 @@ class ClientDataView:
 class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
     fields = '__all__'
+    pk_url_kwarg = 'client_id'
 
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
@@ -140,10 +150,16 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         context['tab_to_open'] = context['view'].kwargs['tab']
         return context
 
+    # todo:test:added for testing
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset=queryset)
+        return object
+
 
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Client
     template_name = 'ccf/generic_confirm_delete.html'
+    context_object_name = 'generic_object'
+    model = Client
 
     # page to redirect to after client is deleted; user list view
     def get_success_url(self):
@@ -159,10 +175,18 @@ class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class ClientCreateView(ClientDataView, LoginRequiredMixin, CreateView):
     template_name = 'ccf/generic_add_update_form.html'
+    context_object_name = 'generic_object'
+
+    # todo:test:added for testing
+    def get(self, request, *args, **kwargs):
+        result = super().get(request, *args, **kwargs)
+        return result
 
 
 class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'ccf/generic_add_update_form.html'
+    context_object_name = 'generic_object'
+    pk_url_kwarg = 'client_id'
 
     # used by UserPassesTestMixin
     def test_func(self):
@@ -173,20 +197,37 @@ class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, 
 
 
 class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Medical
     template_name = 'ccf/generic_add_update_form.html'
-    context_object_name = 'medical'
+    # because we use generic templates, we can't use a friendly name for
+    # each model, we will settle on 'generic_object' (to distinguish it from
+    # the default 'object')
+    context_object_name = 'generic_object'
+    model = Medical
     fields = [
-        'conditions',
-        'medication',
-        'appearance',
-        'peels',
+        'allergies',
+        'chronic_skin_conditions',
+        'illnesses_disorders',
+        'cosmetic_procedures',
+        'medications',
+        'pregnancy',
+        'skin_type',
+        'skin_conditions',
+        'concerns',
+        'colour_lashes',
+        'colour_eye_brows',
     ]
     optional_fields = [
-        'conditions',
-        'medication',
-        'appearance',
-        'peels',
+        'allergies',
+        'chronic_skin_conditions',
+        'illnesses_disorders',
+        'cosmetic_procedures',
+        'medications',
+        'pregnancy',
+        'skin_type',
+        'skin_conditions',
+        'concerns',
+        'colour_lashes',
+        'colour_eye_brows',
     ]
 
     def get_form(self, form_class=None):
@@ -199,6 +240,11 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def form_valid(self, form):
         form.instance.therapist = self.request.user
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        # call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
 
     # used by UserPassesTestMixin
     def test_func(self):
@@ -216,6 +262,11 @@ class GenericDataView:
     optional_fields = [
         'content',
     ]
+
+    # todo:test:added for testing
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset=queryset)
+        return object
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -248,14 +299,27 @@ class NoteDataView(GenericDataView):
 
 class NoteCreateView(NoteDataView, LoginRequiredMixin, CreateView):
     template_name = 'ccf/generic_add_update_form.html'
+    context_object_name = 'generic_object'
+
+    # todo:test:added for testing
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset=queryset)
+        return object
+
+    # todo:test:added for testing
+    def get(self, request, *args, **kwargs):
+        result = super().get(request, *args, **kwargs)
+        return result
 
 
 class NoteUpdateView(NoteDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'ccf/generic_add_update_form.html'
+    context_object_name = 'generic_object'
 
 
 class NoteDetailView(LoginRequiredMixin, DetailView):
     template_name = 'ccf/generic_detail.html'
+    context_object_name = 'generic_object'
     model = Note
     fields = "__all__"
 
@@ -268,8 +332,9 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
 
 
 class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Note
     template_name = 'ccf/generic_confirm_delete.html'
+    context_object_name = 'generic_object'
+    model = Note
 
     # page to redirect to after client is deleted; user list view
     def get_success_url(self):
@@ -296,17 +361,24 @@ class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class TreatmentDataView(GenericDataView):
     model = Treatment
 
+    # todo:test:added for testing
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset=queryset)
+        return object
 
 class TreatmentCreateView(TreatmentDataView, LoginRequiredMixin, CreateView):
     template_name = 'ccf/generic_add_update_form.html'
+    context_object_name = 'generic_object'
 
 
 class TreatmentUpdateView(TreatmentDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'ccf/generic_add_update_form.html'
+    context_object_name = 'generic_object'
 
 
 class TreatmentDetailView(LoginRequiredMixin, DetailView):
     template_name = 'ccf/generic_detail.html'
+    context_object_name = 'generic_object'
     model = Treatment
     fields = "__all__"
 
@@ -319,8 +391,9 @@ class TreatmentDetailView(LoginRequiredMixin, DetailView):
 
 
 class TreatmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Treatment
     template_name = 'ccf/generic_confirm_delete.html'
+    context_object_name = 'generic_object'
+    model = Treatment
 
     # page to redirect to after client is deleted; user list view
     def get_success_url(self):

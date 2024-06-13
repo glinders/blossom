@@ -13,7 +13,7 @@
       <div class="media-body">
         {% for client in clients %}
         <div class="article-metadata">
-          <a class="article-title" href="{% url 'ccf:client-detail' pk=client.id tab=CLIENT_TAB_DETAILS %}">{{ client.display_name }}</a>
+          <a class="article-title" href="{% url 'ccf:client-detail' client_id=client.id tab=CLIENT_TAB_DETAILS %}">{{ client.display_name }}</a>
           ({{ client.full_name }})
         </div>
         {% endfor %}

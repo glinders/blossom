@@ -47,7 +47,10 @@ class Client(models.Model):
     def get_absolute_url(self):
         return reverse(
             'ccf:client-detail',
-            kwargs={'pk': self.pk, 'tab': ccf.symbols.CLIENT_TAB_DETAILS},
+            kwargs={
+                'client_id': self.pk,
+                'tab': ccf.symbols.CLIENT_TAB_DETAILS
+            },
         )
 
 
@@ -56,10 +59,17 @@ class Medical(models.Model):
     # on delete, delete everything i.e. cascade
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
     # TextField: multi-line text
-    conditions = models.TextField(default='')
-    medication = models.TextField(default='')
-    appearance = models.TextField(default='')
-    peels = models.TextField(default='')
+    allergies = models.TextField(default='')
+    chronic_skin_conditions = models.TextField(default='')
+    illnesses_disorders = models.TextField(default='')
+    cosmetic_procedures = models.TextField(default='')
+    medications = models.TextField(default='')
+    pregnancy = models.TextField(default='')
+    skin_type = models.TextField(default='')
+    skin_conditions = models.TextField(default='')
+    concerns = models.TextField(default='')
+    colour_lashes = models.TextField(default='')
+    colour_eye_brows = models.TextField(default='')
     # this will be updated when the note is edited
     date_updated = models.DateTimeField(default=timezone.now)
 
@@ -79,7 +89,10 @@ class Medical(models.Model):
         # page to redirect to after creating new object
         return reverse(
             'ccf:client-detail',
-            kwargs={'pk': self.pk, 'tab': ccf.symbols.CLIENT_TAB_MEDICAL},
+            kwargs={
+                'pk': self.pk,
+                'tab': ccf.symbols.CLIENT_TAB_MEDICAL
+            },
         )
 
 
@@ -96,7 +109,8 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
-    # generic templates use 'object.display_name' to refer to the instance name
+    # our generic templates use 'generic_object.display_name'
+    # to refer to the instance name
     @property
     def display_name(self):
         return self.title
@@ -123,7 +137,8 @@ class Treatment(models.Model):
     def __str__(self):
         return self.title
 
-    # generic templates use 'object.display_name' to refer to the instance name
+    # our generic templates use 'generic_object.display_name'
+    # to refer to the instance name
     @property
     def display_name(self):
         return self.title

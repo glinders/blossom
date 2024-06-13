@@ -12,7 +12,11 @@
       </fieldset>
       <div class="form-group">
         <button class="btn btn-outline-info" type="submit">{{ action }}</button>
-        <a class="btn btn-outline-secondary" href="{{ object.get_absolute_url }}">Cancel</a>
+        {% if model == 'User' %}
+        <a class="btn btn-outline-secondary" href="{% url cancel_url user %}">Cancel</a>
+        {% else %}
+        <a class="btn btn-outline-secondary" href="{% url cancel_url client_id=view.kwargs.client_id tab=client_tab %}">Cancel</a>
+        {% endif %}
       </div>
     </form>
   </div>

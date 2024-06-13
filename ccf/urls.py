@@ -15,6 +15,8 @@ urlpatterns_notes = [
                 'title': 'New Note',
                 'model': 'Note',
                 'action': 'Add',
+                'cancel_url': 'ccf:client-detail',
+                'client_tab': ccf.symbols.CLIENT_TAB_NOTES,
             },
         ),
         name='note-create',
@@ -27,6 +29,8 @@ urlpatterns_notes = [
                 'title': 'Note Update',
                 'model': 'Note',
                 'action': 'Update',
+                'cancel_url': 'ccf:client-detail',
+                'client_tab': ccf.symbols.CLIENT_TAB_NOTES,
             },
         ),
         name='note-update',
@@ -38,7 +42,7 @@ urlpatterns_notes = [
             extra_context={
                 'title': 'Note Detail',
                 'model': 'Note',
-                'return_url': 'ccf:client-detail',
+                'cancel_url': 'ccf:client-detail',
                 'update_url': 'ccf:note-update',
                 'delete_url': 'ccf:note-delete',
                 'client_tab': ccf.symbols.CLIENT_TAB_NOTES,
@@ -69,6 +73,8 @@ urlpatterns_treatments = [
                 'title': 'New Treatment',
                 'model': 'Treatment',
                 'action': 'Add',
+                'cancel_url': 'ccf:client-detail',
+                'client_tab': ccf.symbols.CLIENT_TAB_TREATMENTS,
             },
         ),
         name='treatment-create',
@@ -81,6 +87,8 @@ urlpatterns_treatments = [
                 'title': 'Treatment Update',
                 'model': 'Treatment',
                 'action': 'Update',
+                'cancel_url': 'ccf:client-detail',
+                'client_tab': ccf.symbols.CLIENT_TAB_TREATMENTS,
             },
         ),
         name='treatment-update',
@@ -92,7 +100,7 @@ urlpatterns_treatments = [
             extra_context={
                 'title': 'Treatment Detail',
                 'model': 'Treatment',
-                'return_url': 'ccf:client-detail',
+                'cancel_url': 'ccf:client-detail',
                 'update_url': 'ccf:treatment-update',
                 'delete_url': 'ccf:treatment-delete',
                 'client_tab': ccf.symbols.CLIENT_TAB_TREATMENTS,
@@ -127,16 +135,20 @@ urlpatterns = [
     path(
         'user/<str:username>/',
         views.UserClientListView.as_view(
-            extra_context={'title': 'Clients'},
+            extra_context={
+                'title': 'Clients'
+            },
         ),
         name='user-clients',
     ),
     # page to view single client; this is a tabbed view
     # <int:tab> selects the tab to show
     path(
-        'client/<int:pk>/detail/<int:tab>/',
+        'client/<int:client_id>/detail/<int:tab>/',
         views.ClientDetailView.as_view(
-            extra_context={'title': 'Client Detail'},
+            extra_context={
+                'title': 'Client Detail'
+            },
         ),
         name='client-detail',
     ),
@@ -146,27 +158,30 @@ urlpatterns = [
         views.ClientCreateView.as_view(
             extra_context={
                 'title': 'New Client',
-                'model': 'Client',
+                'model': 'User',
                 'action': 'Add',
+                'cancel_url': 'ccf:user-clients',
             },
         ),
         name='client-create',
     ),
     # page to update a client
     path(
-        'client/<int:pk>/update/',
+        'client/<int:client_id>/update/',
         views.ClientUpdateView.as_view(
             extra_context={
                 'title': 'Client Update',
                 'model': 'Client',
                 'action': 'Update',
+                'cancel_url': 'ccf:client-detail',
+                'client_tab': ccf.symbols.CLIENT_TAB_DETAILS,
             },
         ),
         name='client-update',
     ),
     # page to delete a client
     path(
-        'client/<int:pk>/delete/',
+        'client/<int:client_id>/delete/',
         views.ClientDeleteView.as_view(
             extra_context={
                 'title': 'Client Delete',
@@ -178,7 +193,7 @@ urlpatterns = [
     ),
     # page to update medical details of a client
     path(
-        'client/<int:pk>/medical/update/',
+        'client/<int:client_id>/medical/update/',
         views.MedicalUpdateView.as_view(
             extra_context={
                 'title': 'Medical Update',
