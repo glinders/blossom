@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# restart application
+#
+# WARNING -- deletes all data -- WARNING
+#
+#
+
+echo ''
+echo 'All Django data including database will be removed'
+echo ''
+
+# ask for permission first
+read -p "Do you want to continue? (yes/no) " yn
+case $yn in
+  yes ) echo proceeding...;;
+	* ) echo exiting...;
+		exit;;
+esac
+
+# delete database & migrations
+rm db.sqlite3
+rm ccf\migrations\00*.py
+rm users\migrations\00*.py
+
+# create migrations & migrate
+python manage.py makemigrations
+python manage.py migrate
+
+# provide superuser name, email and password
+DJANGO_SUPERUSER_PASSWORD='admin'
+python manage.py createsuperuser --username admin --email "admin@admin.com" --noinput
+
+
+
+

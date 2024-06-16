@@ -123,6 +123,8 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
     fields = '__all__'
     pk_url_kwarg = 'client_id'
+    # use paginator for notes and treatments
+    # todo:add pagination for notes and treatments
 
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
