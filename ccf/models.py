@@ -65,13 +65,9 @@ class Medical(models.Model):
     cosmetic_procedures = models.TextField(default='')
     medications = models.TextField(default='')
     pregnancy = models.TextField(default='')
-    skin_type = models.TextField(default='')
-    skin_conditions = models.TextField(default='')
-    concerns = models.TextField(default='')
-    colour_lashes = models.TextField(default='')
-    colour_eye_brows = models.TextField(default='')
     # this will be updated when the note is edited
     date_updated = models.DateTimeField(default=timezone.now)
+    # todo:add verbose names for fields
 
     def __str__(self):
         return f'{self.client.display_name} Medical'
@@ -92,6 +88,43 @@ class Medical(models.Model):
             kwargs={
                 'client_id': self.pk,
                 'tab': ccf.symbols.CLIENT_TAB_MEDICAL
+            },
+        )
+
+
+class Consultation(models.Model):
+    # connect our user model to django's user model
+    # on delete, delete everything i.e. cascade
+    client = models.OneToOneField(Client, on_delete=models.CASCADE)
+    # TextField: multi-line text
+    skin_type = models.TextField(default='')
+    skin_conditions = models.TextField(default='')
+    concerns = models.TextField(default='')
+    colour_lashes = models.TextField(default='')
+    colour_eye_brows = models.TextField(default='')
+    # this will be updated when the note is edited
+    date_updated = models.DateTimeField(default=timezone.now)
+    # todo:add verbose names for fields
+
+    def __str__(self):
+        return f'{self.client.display_name} Consultation'
+
+    def get_detail_fields(self):
+        return [
+            (field.verbose_name, field.value_from_object(self))
+            for field in self._meta.fields
+            if field.name not in (
+                'id', 'client', 'date_updated'
+            )
+        ]
+
+    def get_absolute_url(self):
+        # page to redirect to after creating new object
+        return reverse(
+            'ccf:client-detail',
+            kwargs={
+                'client_id': self.pk,
+                'tab': ccf.symbols.CLIENT_TAB_CONSULTATION
             },
         )
 

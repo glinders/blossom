@@ -19,20 +19,23 @@
       <p class="article-content">{{ object.content }}</p>
       <ul class="nav nav-tabs px-1 mb-1" role="tablist">
         <li class="nav-item" role="presentation">
-          <a class="nav-link px-1 {{ tab_to_open|active_tab:'0' }}" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="false">details</a>
+          <a class="nav-link px-1 {{ tab_to_open|active_tab:'0' }}" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab">details</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link px-1 {{ tab_to_open|active_tab:'1' }}" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">notes</a>
+          <a class="nav-link px-1 {{ tab_to_open|active_tab:'1' }}" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab">notes</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link px-1 {{ tab_to_open|active_tab:'2' }}" id="simple-tab-2" data-bs-toggle="tab" href="#simple-tabpanel-2" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">treatments</a>
+          <a class="nav-link px-1 {{ tab_to_open|active_tab:'2' }}" id="simple-tab-2" data-bs-toggle="tab" href="#simple-tabpanel-2" role="tab">treatments</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link px-1 {{ tab_to_open|active_tab:'3' }}" id="simple-tab-3" data-bs-toggle="tab" href="#simple-tabpanel-3" role="tab" aria-controls="simple-tabpanel-3" aria-selected="false">medical</a>
+          <a class="nav-link px-1 {{ tab_to_open|active_tab:'3' }}" id="simple-tab-3" data-bs-toggle="tab" href="#simple-tabpanel-3" role="tab">medical</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link px-1 {{ tab_to_open|active_tab:'4' }}" id="simple-tab-4" data-bs-toggle="tab" href="#simple-tabpanel-4" role="tab">consultation</a>
         </li>
       </ul>
       <div class="tab-content pt-2" id="tab-content">
-        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_DETAILS }}" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_DETAILS }}" id="simple-tabpanel-0" role="tabpanel">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in object.get_detail_fields %}
             <tr>
@@ -45,7 +48,7 @@
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:client-update' object.id %}">Update</a>
         {% endif %}
         </div>
-        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_NOTES }}" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_NOTES }}" id="simple-tabpanel-1" role="tabpanel"">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for note in notes %}
           <tr>
@@ -60,7 +63,7 @@
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:note-create' object.id %}">Add Note</a>
           {% endif %}
         </div>
-        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_TREATMENTS }}" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_TREATMENTS }}" id="simple-tabpanel-2" role="tabpanel">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for treatment in treatments %}
           <tr>
@@ -75,7 +78,7 @@
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:treatment-create' object.id %}">Add Treatment</a>
           {% endif %}
         </div>
-        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_MEDICAL }}" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_MEDICAL }}" id="simple-tabpanel-3" role="tabpanel">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in medical.get_detail_fields %}
             <tr>
@@ -90,6 +93,23 @@
           </table>
           {% if object.therapist == user %}
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:medical-update' object.id %}">Update</a>
+          {% endif %}
+        </div>
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_CONSULATATION }}" id="simple-tabpanel-4" role="tabpanel">
+          <table class="table table-sm table-hover table-bordered" style="width:auto">
+          {% for label, value in consultation.get_detail_fields %}
+            <tr>
+              <td><h5>{{ label }}</h5></td>
+            </tr>
+            <tr>
+              <td>{{ value }}</td>
+            </tr>
+          {% empty %}
+          Client has no consultation data
+          {% endfor %}
+          </table>
+          {% if object.therapist == user %}
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:consultation-update' object.id %}">Update</a>
           {% endif %}
         </div>
       </div>

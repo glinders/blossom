@@ -27,7 +27,7 @@ from bootstrap_datepicker_plus.widgets import (
 
 import ccf.symbols
 from .models import (
-    Client, Note, Treatment, Medical,
+    Client, Note, Treatment, Medical, Consultation,
 )
 from .filters import (
     ClientFilter,
@@ -129,7 +129,7 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # add all Notes, Treatments & Medical details for this client
+        # add all Notes, Treatments, Medical & Consultation details for client
         context['notes'] = (
             Note.objects
             .filter(client=context['client'])
@@ -145,6 +145,13 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         except IndexError:
             medical_data = None
         context['medical'] = medical_data
+        try:
+            consultation_data = Consultation.objects.filter(
+                client=context['client']
+            )[0]
+        except IndexError:
+            consultation_data = None
+        context['consultation'] = consultation_data
         # add number of tab we want to activate
         context['tab_to_open'] = context['view'].kwargs['tab']
         return context
@@ -211,11 +218,6 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         'cosmetic_procedures',
         'medications',
         'pregnancy',
-        'skin_type',
-        'skin_conditions',
-        'concerns',
-        'colour_lashes',
-        'colour_eye_brows',
     ]
     optional_fields = [
         'allergies',
@@ -224,6 +226,48 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         'cosmetic_procedures',
         'medications',
         'pregnancy',
+    ]
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # account for optional fields
+        for f in self.optional_fields:
+            form.fields[f].required = False
+        return form
+
+    def form_valid(self, form):
+        form.instance.therapist = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        # call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
+
+    # used by UserPassesTestMixin
+    def test_func(self):
+        # current user must be the therapist of the client to update it
+        medical = self.get_object()
+        client = medical.client
+        return self.request.user == client.therapist
+
+
+class ConsultationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    template_name = 'ccf/generic_add_update_form.html'
+    # because we use generic templates, we can't use a friendly name for
+    # each model, we will settle on 'generic_object' (to distinguish it from
+    # the default 'object')
+    context_object_name = 'generic_object'
+    pk_url_kwarg = 'client_id'
+    model = Consultation
+    fields = [
+        'skin_type',
+        'skin_conditions',
+        'concerns',
+        'colour_lashes',
+        'colour_eye_brows',
+    ]
+    optional_fields = [
         'skin_type',
         'skin_conditions',
         'concerns',
@@ -250,8 +294,8 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     # used by UserPassesTestMixin
     def test_func(self):
         # current user must be the therapist of the client to update it
-        medical = self.get_object()
-        client = medical.client
+        consultation = self.get_object()
+        client = consultation.client
         return self.request.user == client.therapist
 
 

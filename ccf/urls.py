@@ -205,6 +205,20 @@ urlpatterns = [
         ),
         name='medical-update',
     ),
+    # page to update consultation details of a client
+    path(
+        'client/<int:client_id>/consultation/update/',
+        views.ConsultationUpdateView.as_view(
+            extra_context={
+                'title': 'Consultation Update',
+                'model': 'Consultation',
+                'action': 'Update',
+                'cancel_url': 'ccf:client-detail',
+                'client_tab': ccf.symbols.CLIENT_TAB_CONSULTATION,
+            },
+        ),
+        name='consultation-update',
+    ),
     # about page
     path(
         'about/',
