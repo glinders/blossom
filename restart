@@ -20,8 +20,8 @@ esac
 
 # delete database & migrations
 rm db.sqlite3
-rm ccf\migrations\00*.py
-rm users\migrations\00*.py
+rm ccf/migrations/00*.py
+rm users/migrations/00*.py
 
 # create migrations & migrate
 python manage.py makemigrations
