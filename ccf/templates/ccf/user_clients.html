@@ -1,13 +1,7 @@
 {% extends "ccf/base.html" %}
 {% block content %}
-  <!--  # todo:test
-  <h1 class="mb-3">Clients of {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
-  -->
     <form method="GET" action="{% url 'ccf:user-clients' view.kwargs.username %}">
         {{ form.as_p }}
-        <!--  # todo:test
-        <input type="submit" value="submit" class="btn btn-primary">
-        -->
     </form>
     <article class="media content-section">
       <div class="media-body">

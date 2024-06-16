@@ -9,7 +9,6 @@
           <small class="text-muted">{{ client.date_added|date:"d F, Y" }}</small>
         </div>
         <h2><a class="article-title" href="{% url 'ccf:client-detail' client_id=client.id tab=CLIENT_TAB_DETAILS %}">{{ client.display_name }}</a></h2>
-        <!-- todo:show clients as list -->
         <p class="article-content">{{ client.display_name }}</p>
       </div>
     </article>

@@ -52,8 +52,6 @@ class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     # order our clients by date in reversed order (using a '-') to get the
     # newest clients first i.e. at the top of the page
-    # todo:order alphabetically
-    # todo:show compact, scrollable list
     ordering = ['-date_added']
     # turn on paginator and show a limited number of pages
     paginate_by = 5
@@ -63,8 +61,7 @@ class UserClientListView(LoginRequiredMixin, ListView):
     template_name = 'ccf/user_clients.html'
     context_object_name = 'clients'
     model = Client
-    paginate_by = 5
-    # todo:show compact, scrollable list
+    paginate_by = 16
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -159,6 +156,7 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'ccf/generic_confirm_delete.html'
     context_object_name = 'generic_object'
+    pk_url_kwarg = 'client_id'
     model = Client
 
     # page to redirect to after client is deleted; user list view
@@ -367,6 +365,7 @@ class TreatmentDataView(GenericDataView):
     def get_object(self, queryset=None):
         object = super().get_object(queryset=queryset)
         return object
+
 
 class TreatmentCreateView(TreatmentDataView, LoginRequiredMixin, CreateView):
     template_name = 'ccf/generic_add_update_form.html'
