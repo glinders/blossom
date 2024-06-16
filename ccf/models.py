@@ -90,7 +90,7 @@ class Medical(models.Model):
         return reverse(
             'ccf:client-detail',
             kwargs={
-                'pk': self.pk,
+                'client_id': self.pk,
                 'tab': ccf.symbols.CLIENT_TAB_MEDICAL
             },
         )

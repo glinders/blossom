@@ -199,6 +199,8 @@ urlpatterns = [
                 'title': 'Medical Update',
                 'model': 'Medical',
                 'action': 'Update',
+                'cancel_url': 'ccf:client-detail',
+                'client_tab': ccf.symbols.CLIENT_TAB_MEDICAL,
             },
         ),
         name='medical-update',

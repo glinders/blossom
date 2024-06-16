@@ -202,6 +202,7 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     # each model, we will settle on 'generic_object' (to distinguish it from
     # the default 'object')
     context_object_name = 'generic_object'
+    pk_url_kwarg = 'client_id'
     model = Medical
     fields = [
         'allergies',
@@ -334,14 +335,15 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
 class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'ccf/generic_confirm_delete.html'
     context_object_name = 'generic_object'
+    pk_url_kwarg = 'client_id'
     model = Note
 
-    # page to redirect to after client is deleted; user list view
+    # page to redirect to after note is deleted; client view
     def get_success_url(self):
         return reverse(
             'ccf:client-detail',
             kwargs={
-                'pk': self.object.client_id,
+                'client_id': self.object.client_id,
                 'tab': ccf.symbols.CLIENT_TAB_NOTES,
             }
         )
@@ -395,12 +397,12 @@ class TreatmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     context_object_name = 'generic_object'
     model = Treatment
 
-    # page to redirect to after client is deleted; user list view
+    # page to redirect to after treatment is deleted; client view
     def get_success_url(self):
         return reverse(
             'ccf:client-detail',
             kwargs={
-                'pk': self.object.client_id,
+                'client_id': self.object.client_id,
                 'tab': ccf.symbols.CLIENT_TAB_TREATMENTS,
             }
         )
