@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import capfirst
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -36,7 +37,7 @@ class Client(models.Model):
 
     def get_detail_fields(self):
         return [
-            (field.verbose_name, field.value_from_object(self))
+            (capfirst(field.verbose_name), field.value_from_object(self))
             for field in self._meta.fields
             if field.name not in (
                 'id', 'display_name', 'therapist', 'date_added'
@@ -58,23 +59,26 @@ class Medical(models.Model):
     # connect our user model to django's user model
     # on delete, delete everything i.e. cascade
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
-    # TextField: multi-line text
-    allergies = models.TextField(default='')
+    # TextField: multi-line text, use kwarg 'verbose_name' to set name
+    # displayed in forms (done here as an example)
+    allergies = models.TextField(
+        verbose_name='Allergies',
+        default='',
+    )
     chronic_skin_conditions = models.TextField(default='')
-    illnesses_disorders = models.TextField(default='')
+    illnesses_and_disorders = models.TextField(default='')
     cosmetic_procedures = models.TextField(default='')
     medications = models.TextField(default='')
     pregnancy = models.TextField(default='')
     # this will be updated when the note is edited
     date_updated = models.DateTimeField(default=timezone.now)
-    # todo:add verbose names for fields
 
     def __str__(self):
         return f'{self.client.display_name} Medical'
 
     def get_detail_fields(self):
         return [
-            (field.verbose_name, field.value_from_object(self))
+            (capfirst(field.verbose_name), field.value_from_object(self))
             for field in self._meta.fields
             if field.name not in (
                 'id', 'client', 'date_updated'
@@ -100,23 +104,23 @@ class Consultation(models.Model):
     skin_type = models.TextField(default='')
     skin_conditions = models.TextField(default='')
     concerns = models.TextField(default='')
-    colour_lashes = models.TextField(default='')
-    colour_eye_brows = models.TextField(default='')
+    lash_colour = models.TextField(default='')
+    eyebrow_colour = models.TextField(default='')
     # this will be updated when the note is edited
     date_updated = models.DateTimeField(default=timezone.now)
-    # todo:add verbose names for fields
 
     def __str__(self):
         return f'{self.client.display_name} Consultation'
 
     def get_detail_fields(self):
-        return [
-            (field.verbose_name, field.value_from_object(self))
+        data = [
+            (capfirst(field.verbose_name), field.value_from_object(self))
             for field in self._meta.fields
             if field.name not in (
                 'id', 'client', 'date_updated'
             )
         ]
+        return data
 
     def get_absolute_url(self):
         # page to redirect to after creating new object

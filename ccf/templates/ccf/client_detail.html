@@ -82,10 +82,10 @@
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in medical.get_detail_fields %}
             <tr>
-              <td><h5>{{ label }}</h5></td>
+              <td><b>{{ label }}</b></td>
             </tr>
             <tr>
-              <td>{{ value }}</td>
+              <td>{{ value|linebreaks|truncate_field:'5000' }}</td>
             </tr>
           {% empty %}
           Client has no medical data
@@ -95,14 +95,14 @@
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:medical-update' object.id %}">Update</a>
           {% endif %}
         </div>
-        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_CONSULATATION }}" id="simple-tabpanel-4" role="tabpanel">
+        <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_CONSULTATION }}" id="simple-tabpanel-4" role="tabpanel">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
           {% for label, value in consultation.get_detail_fields %}
             <tr>
-              <td><h5>{{ label }}</h5></td>
+              <td><b>{{ label }}</b></td>
             </tr>
             <tr>
-              <td>{{ value }}</td>
+              <td>{{ value|linebreaks|truncate_field:'5000' }}</td>
             </tr>
           {% empty %}
           Client has no consultation data

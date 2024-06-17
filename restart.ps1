@@ -7,8 +7,8 @@
 echo ''
 echo 'All Django data including database will be removed'
 echo ''
-$confirmation = Read-Host 'Do you want to continue'
-if ($confirmation -ne 'y') {
+$confirmation = Read-Host 'Do you want to continue? (yes/no)'
+if ($confirmation -ne 'yes') {
     echo ''
     echo 'Aborting...'
     exit(0)

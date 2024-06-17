@@ -17,6 +17,9 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from django.forms.widgets import (
+    Textarea,
+)
 from django.utils.decorators import classonlymethod
 from django.urls import (
     reverse
@@ -124,7 +127,8 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     fields = '__all__'
     pk_url_kwarg = 'client_id'
     # use paginator for notes and treatments
-    # todo:add pagination for notes and treatments
+    # todo:add separate page for notes and treatments
+    # todo:add pagination for notes and treatments (on separate page)
 
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
@@ -214,7 +218,7 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = [
         'allergies',
         'chronic_skin_conditions',
-        'illnesses_disorders',
+        'illnesses_and_disorders',
         'cosmetic_procedures',
         'medications',
         'pregnancy',
@@ -222,7 +226,7 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     optional_fields = [
         'allergies',
         'chronic_skin_conditions',
-        'illnesses_disorders',
+        'illnesses_and_disorders',
         'cosmetic_procedures',
         'medications',
         'pregnancy',
@@ -232,7 +236,11 @@ class MedicalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = super().get_form(form_class)
         # account for optional fields
         for f in self.optional_fields:
+            # optional fields are not required
             form.fields[f].required = False
+            # change number of rows of input fields with multiple rows
+            if isinstance(form.fields[f].widget, Textarea):
+                form.fields[f].widget.attrs['rows'] = 4
         return form
 
     def form_valid(self, form):
@@ -264,22 +272,26 @@ class ConsultationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
         'skin_type',
         'skin_conditions',
         'concerns',
-        'colour_lashes',
-        'colour_eye_brows',
+        'lash_colour',
+        'eyebrow_colour',
     ]
     optional_fields = [
         'skin_type',
         'skin_conditions',
         'concerns',
-        'colour_lashes',
-        'colour_eye_brows',
+        'lash_colour',
+        'eyebrow_colour',
     ]
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         # account for optional fields
         for f in self.optional_fields:
+            # optional fields are not required
             form.fields[f].required = False
+            # change number of rows of input fields with multiple rows
+            if isinstance(form.fields[f].widget, Textarea):
+                form.fields[f].widget.attrs['rows'] = 4
         return form
 
     def form_valid(self, form):
