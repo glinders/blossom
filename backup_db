@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# backup sqlite database
+#
+# create backup dir (in case it doesn't exist)
+BACKUP_DIR='./backup'
+mkdir -p ${BACKUP_DIR}
+# get timestamp to prefix backup
+TIMESTAMP=`date +%Y%m%d`
+# database name
+DATABASE='db.sqlite3'
+# copy database
+cp ${DATABASE} ${BACKUP_DIR}/${TIMESTAMP}.${DATABASE}
