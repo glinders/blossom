@@ -1,3 +1,7 @@
+### allow execute on Windows
+```
+git update-index --chmod=+x backup_db restart
+```
 
 ### migrations
 to see actual SQL code when the migration is executed, run:
