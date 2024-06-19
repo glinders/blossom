@@ -1,5 +1,5 @@
 # version of our application
-CCF_APP_VERSION = '0.1.0'
+CCF_APP_VERSION = '1.0b1'
 
 # tab names of client-detail view
 # matches tab numbering in ccf/templates/ccf/client_detail.html
