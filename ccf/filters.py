@@ -7,7 +7,7 @@ from ccf.models import Client
 
 # see https://stackoverflow.com/a/52820205/4459346
 class ClientFilter(django_filters.FilterSet):
-    multi_name_fields = django_filters.CharFilter(
+    multi_name_search = django_filters.CharFilter(
         label='Search',
         method='filter_all_name_fields',
     )

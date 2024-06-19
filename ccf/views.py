@@ -76,6 +76,10 @@ class UserClientListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context['form'] = self.filterset.form
+        # retain search term, so we can paginate the search results
+        multi_name_search = self.request.GET.get('multi_name_search')
+        context['multi_name_search'] = \
+            multi_name_search if multi_name_search else ''
         return context
 
 
