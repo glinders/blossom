@@ -26,7 +26,7 @@ urlpatterns_notes = [
         'client/<int:client_id>/note/<int:pk>/update/',
         views.NoteUpdateView.as_view(
             extra_context={
-                'title': 'Note Update',
+                'title': 'Update Note',
                 'model': 'Note',
                 'action': 'Update',
                 'cancel_url': 'ccf:client-detail',
@@ -55,7 +55,7 @@ urlpatterns_notes = [
         'client/<int:client_id>/note/<int:pk>/delete/',
         views.NoteDeleteView.as_view(
             extra_context={
-                'title': 'Note Delete',
+                'title': 'Delete Note',
                 'model': 'Note',
                 'name': 'title',
             },
@@ -84,7 +84,7 @@ urlpatterns_treatments = [
         'client/<int:client_id>/treatment/<int:pk>/update/',
         views.TreatmentUpdateView.as_view(
             extra_context={
-                'title': 'Treatment Update',
+                'title': 'Update Treatment',
                 'model': 'Treatment',
                 'action': 'Update',
                 'cancel_url': 'ccf:client-detail',
@@ -113,7 +113,7 @@ urlpatterns_treatments = [
         'client/<int:client_id>/treatment/<int:pk>/delete/',
         views.TreatmentDeleteView.as_view(
             extra_context={
-                'title': 'Treatment Delete',
+                'title': 'Delete Treatment',
                 'model': 'Treatment',
                 'name': 'title',
             },
@@ -170,7 +170,7 @@ urlpatterns = [
         'client/<int:client_id>/update/',
         views.ClientUpdateView.as_view(
             extra_context={
-                'title': 'Client Update',
+                'title': 'Update Client',
                 'model': 'Client',
                 'action': 'Update',
                 'cancel_url': 'ccf:client-detail',
@@ -184,7 +184,7 @@ urlpatterns = [
         'client/<int:client_id>/delete/',
         views.ClientDeleteView.as_view(
             extra_context={
-                'title': 'Client Delete',
+                'title': 'Delete Client',
                 'model': 'Client',
                 'name': 'display_name',
             },
@@ -196,7 +196,7 @@ urlpatterns = [
         'client/<int:client_id>/medical/update/',
         views.MedicalUpdateView.as_view(
             extra_context={
-                'title': 'Medical Update',
+                'title': 'Update Medical',
                 'model': 'Medical',
                 'action': 'Update',
                 'cancel_url': 'ccf:client-detail',
@@ -210,7 +210,7 @@ urlpatterns = [
         'client/<int:client_id>/consultation/update/',
         views.ConsultationUpdateView.as_view(
             extra_context={
-                'title': 'Consultation Update',
+                'title': 'Update Consultation',
                 'model': 'Consultation',
                 'action': 'Update',
                 'cancel_url': 'ccf:client-detail',

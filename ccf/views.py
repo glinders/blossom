@@ -35,6 +35,7 @@ from .models import (
 from .filters import (
     ClientFilter,
 )
+import subprocess
 
 
 # class based view for the home page
@@ -478,7 +479,16 @@ class TreatmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 # function based view for the about page
 def about(request):
+    git_hash = subprocess.check_output([
+        'git',
+        'describe',
+        '--match=NeVeRmAtCh',
+        '--always',
+        '--abbrev=7',
+        '--dirty',
+    ]).strip().decode('utf-8')
     context = {
         'title': 'About',
+        'git_hash': git_hash,
     }
     return render(request, 'ccf/about.html', context)
