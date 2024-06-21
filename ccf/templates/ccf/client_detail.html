@@ -59,9 +59,30 @@
           Client has no notes
           {% endfor %}
           </table>
-          {% if object.therapist == user %}
-          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:note-create' object.id %}">Add Note</a>
+          {% if notes.is_paginated %}
+          <div>
+            {% if notes.has_previous %}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page1=1">&#x27EA</a> {# first #}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page1={{ notes.previous_page_number }}">&#x27E8</a> {# previous #}
+            {% endif %}
+            {% for num in notes.paginator.page_range %}
+              {% if notes.number == num %}
+                <a class="btn btn-info mx-2 my-2 px-2 py-2" href="?page1={{ num }}">{{ num }}</a>
+              {% elif num > notes.number|add:'-3' and num < notes.number|add:'3' %}
+                <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page1={{ num }}">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if notes.has_next %}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page1={{ notes.next_page_number }}">&#x27E9</a> {# next #}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page1={{ notes.paginator.num_pages }}">&#x27EB</a> {# last #}
+            {% endif %}
+          </div>
           {% endif %}
+          <div>
+            {% if object.therapist == user %}
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:note-create' object.id %}">Add Note</a>
+            {% endif %}
+          </div>
         </div>
         <div class="tab-pane {{ tab_to_open|active_tab:CLIENT_TAB_TREATMENTS }}" id="simple-tabpanel-2" role="tabpanel">
           <table class="table table-sm table-hover table-bordered" style="width:auto">
@@ -74,6 +95,25 @@
           Client has no treatments
           {% endfor %}
           </table>
+          {% if treatments.is_paginated %}
+          <div>
+            {% if treatments.has_previous %}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page2=1">&#x27EA</a> {# first #}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page2={{ treatments.previous_page_number }}">&#x27E8</a> {# previous #}
+            {% endif %}
+            {% for num in treatments.paginator.page_range %}
+              {% if treatments.number == num %}
+                <a class="btn btn-info mx-2 my-2 px-2 py-2" href="?page2={{ num }}">{{ num }}</a>
+              {% elif num > treatments.number|add:'-3' and num < treatments.number|add:'3' %}
+                <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page2={{ num }}">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if treatments.has_next %}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page2={{ treatments.next_page_number }}">&#x27E9</a> {# next #}
+              <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page2={{ treatments.paginator.num_pages }}">&#x27EB</a> {# last #}
+            {% endif %}
+          </div>
+          {% endif %}
           {% if object.therapist == user %}
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ccf:treatment-create' object.id %}">Add Treatment</a>
           {% endif %}

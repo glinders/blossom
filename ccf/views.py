@@ -5,7 +5,9 @@ from django.shortcuts import (
     render,
     get_object_or_404,
 )
-from django.contrib.auth.models import User
+from django.contrib.auth.models import (
+    User,
+)
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin,
@@ -20,14 +22,15 @@ from django.views.generic import (
 from django.forms.widgets import (
     Textarea,
 )
-from django.utils.decorators import classonlymethod
 from django.urls import (
     reverse
+)
+from django.core.paginator import (
+    PageNotAnInteger, EmptyPage,
 )
 from bootstrap_datepicker_plus.widgets import (
     DatePickerInput,
 )
-
 import ccf.symbols
 from .models import (
     Client, Note, Treatment, Medical, Consultation,
@@ -35,7 +38,11 @@ from .models import (
 from .filters import (
     ClientFilter,
 )
+from .utils import (
+    MyPaginator,
+)
 import subprocess
+import ccf.symbols
 
 
 # class based view for the home page
@@ -65,7 +72,7 @@ class UserClientListView(LoginRequiredMixin, ListView):
     template_name = 'ccf/user_clients.html'
     context_object_name = 'clients'
     model = Client
-    paginate_by = 16
+    paginate_by = ccf.symbols.CLIENTS_PER_PAGE
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -104,16 +111,6 @@ class ClientDataView:
         'profession',
     ]
 
-    # todo:test:added for testing
-    def get_object(self, queryset=None):
-        object = super().get_object(queryset=queryset)
-        return object
-
-    # todo:test:added for testing
-    def get(self, request, *args, **kwargs):
-        result = super().get(request, *args, **kwargs)
-        return result
-
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         for f in self.optional_fields:
@@ -131,24 +128,46 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
     fields = '__all__'
     pk_url_kwarg = 'client_id'
-    # use paginator for notes and treatments
-    # todo:add separate page for notes and treatments
-    # todo:add pagination for notes and treatments (on separate page)
 
     def get_context_data(self, **kwargs):
         # call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # add all Notes, Treatments, Medical & Consultation details for client
-        context['notes'] = (
+        # create paginator for client's notes
+        all_notes = (
             Note.objects
             .filter(client=context['client'])
             .order_by('-date_updated')
         )
-        context['treatments'] = (
+        paginator = MyPaginator(all_notes, ccf.symbols.NOTES_PER_PAGE)
+        page = self.request.GET.get('page1')
+        try:
+            paginated_notes = paginator.page(page)
+        except PageNotAnInteger:
+            paginated_notes = paginator.page(1)
+        except EmptyPage:
+            paginated_notes = paginator.page(paginator.num_pages)
+        # convenience attribute to determine if we need pagination
+        paginated_notes.is_paginated = paginator.num_pages > 1
+        # create paginator for treatments
+        all_treatments = (
             Treatment.objects
             .filter(client=context['client'])
             .order_by('-date_treated')
         )
+        paginator = MyPaginator(all_treatments, ccf.symbols.TREATMENTS_PER_PAGE)
+        page = self.request.GET.get('page2')
+        try:
+            paginated_treatments = paginator.page(page)
+        except PageNotAnInteger:
+            paginated_treatments = paginator.page(1)
+        except EmptyPage:
+            paginated_treatments = paginator.page(paginator.num_pages)
+        # convenience attribute to determine if we need pagination
+        paginated_treatments.is_paginated = paginator.num_pages > 1
+        # add paginated Notes & Treatments to context
+        context['notes'] = paginated_notes
+        context['treatments'] = paginated_treatments
+        # add Medical & Consultation details for client to context
         try:
             medical_data = Medical.objects.filter(client=context['client'])[0]
         except IndexError:
@@ -164,11 +183,6 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         # add number of tab we want to activate
         context['tab_to_open'] = context['view'].kwargs['tab']
         return context
-
-    # todo:test:added for testing
-    def get_object(self, queryset=None):
-        object = super().get_object(queryset=queryset)
-        return object
 
 
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -192,11 +206,6 @@ class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class ClientCreateView(ClientDataView, LoginRequiredMixin, CreateView):
     template_name = 'ccf/generic_add_update_form.html'
     context_object_name = 'generic_object'
-
-    # todo:test:added for testing
-    def get(self, request, *args, **kwargs):
-        result = super().get(request, *args, **kwargs)
-        return result
 
 
 class ClientUpdateView(ClientDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -325,11 +334,6 @@ class GenericDataView:
         'content',
     ]
 
-    # todo:test:added for testing
-    def get_object(self, queryset=None):
-        object = super().get_object(queryset=queryset)
-        return object
-
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         for f in self.optional_fields:
@@ -351,7 +355,7 @@ class GenericDataView:
             client = _object
         else:
             client = _object.client
-        # user must be the therapist of the client to access a note
+        # user must be the therapist of the client to access the data
         return self.request.user == client.therapist
 
 
@@ -362,16 +366,6 @@ class NoteDataView(GenericDataView):
 class NoteCreateView(NoteDataView, LoginRequiredMixin, CreateView):
     template_name = 'ccf/generic_add_update_form.html'
     context_object_name = 'generic_object'
-
-    # todo:test:added for testing
-    def get_object(self, queryset=None):
-        object = super().get_object(queryset=queryset)
-        return object
-
-    # todo:test:added for testing
-    def get(self, request, *args, **kwargs):
-        result = super().get(request, *args, **kwargs)
-        return result
 
 
 class NoteUpdateView(NoteDataView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -384,13 +378,6 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'generic_object'
     model = Note
     fields = "__all__"
-
-    # example how to override the as_view method in class based views
-    @classonlymethod
-    def as_view(cls, **initkwargs):
-        self = cls(**initkwargs)
-        view = super(NoteDetailView, cls).as_view(**initkwargs)
-        return view
 
 
 class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -424,11 +411,6 @@ class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class TreatmentDataView(GenericDataView):
     model = Treatment
 
-    # todo:test:added for testing
-    def get_object(self, queryset=None):
-        object = super().get_object(queryset=queryset)
-        return object
-
 
 class TreatmentCreateView(TreatmentDataView, LoginRequiredMixin, CreateView):
     template_name = 'ccf/generic_add_update_form.html'
@@ -445,13 +427,6 @@ class TreatmentDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'generic_object'
     model = Treatment
     fields = "__all__"
-
-    # example how to override the as_view method in class based views
-    @classonlymethod
-    def as_view(cls, **initkwargs):
-        self = cls(**initkwargs)
-        view = super(TreatmentDetailView, cls).as_view(**initkwargs)
-        return view
 
 
 class TreatmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

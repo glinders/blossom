@@ -19,3 +19,9 @@ def template_symbols(request):
         'CLIENT_TAB_MEDICAL': CLIENT_TAB_MEDICAL,
         'CLIENT_TAB_CONSULTATION': CLIENT_TAB_CONSULTATION,
     }
+
+
+# number of items per page (for paginators)
+CLIENTS_PER_PAGE = 16
+NOTES_PER_PAGE = 16
+TREATMENTS_PER_PAGE = 16

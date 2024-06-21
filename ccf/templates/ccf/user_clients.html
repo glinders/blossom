@@ -14,7 +14,7 @@
       </div>
     </article>
   {% if is_paginated %}
-    {# add search term to paginate the search results #}
+    {# added search term 'multi_name_search' to paginate the search results #}
     {% if page_obj.has_previous %}
       <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page=1&multi_name_search={{ multi_name_search }}">&#x27EA</a> {# first #}
       <a class="btn btn-outline-info mx-2 my-2 px-2 py-2" href="?page={{ page_obj.previous_page_number }}&multi_name_search={{ multi_name_search }}">&#x27E8</a> {# previous #}
