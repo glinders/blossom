@@ -89,6 +89,7 @@
           {% for treatment in treatments %}
           <tr>
             <td><a href="{% url 'ccf:treatment-detail' client_id=object.id pk=treatment.id %}">{{ treatment.title }}</a></td>
+            <td>{{ treatment.date_treated|date:"d M Y" }}</td>
             <td>{{ treatment.content|truncate_field:'40' }}</td>
           </tr>
           {% empty %}

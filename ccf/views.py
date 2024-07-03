@@ -410,6 +410,17 @@ class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class TreatmentDataView(GenericDataView):
     model = Treatment
+    fields = [
+        'title',
+        'content',
+        'date_treated',
+    ]
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['date_treated'].widget = DatePickerInput()
+        form.fields['date_treated'].label = 'Treatment date'
+        return form
 
 
 class TreatmentCreateView(TreatmentDataView, LoginRequiredMixin, CreateView):

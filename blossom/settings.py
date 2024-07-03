@@ -43,7 +43,7 @@ if os.getenv("DJANGO_DEBUG_FLAG_TRUE") is not None:
 
 # settings for DEBUG and for production
 if DEBUG:
-    ALLOWED_HOSTS = ['10.1.1.100', '127.0.0.1', ]
+    ALLOWED_HOSTS = ['10.1.1.110', '127.0.0.1', 'localhost', ]
 else:
     ALLOWED_HOSTS = ['*', ]
     SECURE_SSL_REDIRECT = True
@@ -174,7 +174,7 @@ LOGIN_URL = 'users:login'
 BOOTSTRAP_DATEPICKER_PLUS = {
     "variant_options": {
         "date": {
-            "format": "MM/DD/YYYY",
+            "format": "DD/MM/YYYY",
         },
     }
 }
