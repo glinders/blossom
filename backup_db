@@ -1,15 +1,16 @@
-#!/bin/bash -vx
+#!/bin/bash
 #
 # backup sqlite database
 #
 # create backup dir (in case it doesn't exist)
-BACKUP_DIR='./backup'
+BACKUP_DIR=~/blossom/backup
 mkdir -p ${BACKUP_DIR}
 # get timestamp to prefix backup
 TIMESTAMP=`date +%Y%m%d`
-# database name
-DATABASE='db.sqlite3'
-# go to the right directory
-cd ~/blossom
+# database
+DATABASE_NAME=db.sqlite3
+DATABASE_PATH=~/blossom/${DATABASE_NAME}
 # copy database
-cp ${DATABASE} ${BACKUP_DIR}/${TIMESTAMP}.${DATABASE}
+cp ${DATABASE_PATH} ${BACKUP_DIR}/${TIMESTAMP}.${DATABASE_NAME}
+# delete backups older than 28 days
+find ${BACKUP_DIR} -type f -mtime +28 -delete
